@@ -6,6 +6,7 @@ using UnityEngine;
 using extOSC;
 using TMPro;
 using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OscMaster : MonoBehaviour
@@ -18,9 +19,7 @@ public class OscMaster : MonoBehaviour
 
     [SerializeField] private Text _players;
     [SerializeField] private Text ip;
-
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -46,7 +45,25 @@ public class OscMaster : MonoBehaviour
         _receiver.Bind("/player/*", PlayerRecieved);
 
         ip.text = "Local IP: " + GetLocalIPv4();
+        
+        SceneManager.activeSceneChanged += SceneManagerOnactiveSceneChanged;
     }
+
+    private void SceneManagerOnactiveSceneChanged(Scene arg0, Scene arg1)
+    {
+        print("Scene Changed to: " + arg1.name);
+        if (SceneManager.GetActiveScene().name != "Hub") _receiver.LocalPort = 7205;
+        for (int i = 0; i < ips.Count; i++)
+        {
+            OSCMessage message = new OSCMessage("/scene");
+            message.AddValue(OSCValue.String(arg1.name));
+            _transmitter.RemoteHost = ips[i];
+            _transmitter.RemotePort = ports[i];
+            print(message);
+            _transmitter.Send(message);
+        }
+    }
+
 
     void Init(OSCMessage message)
     {
@@ -55,7 +72,7 @@ public class OscMaster : MonoBehaviour
         if (!phones.Contains("/player/" + message.Values[1].StringValue))
         {
             ips.Add(message.Values[0].StringValue);
-            ports.Add(6960 + phones.Count);
+            ports.Add(6961 + phones.Count);
             phones.Add("/player/" + message.Values[1].StringValue);
         }
 
@@ -98,30 +115,5 @@ public class OscMaster : MonoBehaviour
         }
 
         _players.text = text;
-        //if (message.Address.Contains("accel")) handleAccel(message);
-        if (message.Address.Contains("quat")) handleQuat(message);
-        
-    }
-
-    void handleAccel(OSCMessage message)
-    {
-        foreach (string p in phones)
-        {
-            if (message.Address.Contains(p))
-            {
-                Debug.Log(p + " sent " + message);
-            }
-        }
-    }
-
-    void handleQuat(OSCMessage message)
-    {
-        foreach (string p in phones)
-        {
-            if (message.Address.Contains(p))
-            {
-                Debug.Log(p + " sent " + message);
-            }
-        }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using extOSC;
+using UnityEngine.SceneManagement;
 
 public class LazerMaster : MonoBehaviour
 {
@@ -57,6 +58,11 @@ public class LazerMaster : MonoBehaviour
         col.color = color;
         var redCol = _red.colorOverLifetime;
         redCol.color = colorB;
+
+        if (alphaKey[1].time > 0.95f || alphaKeyB[1].time > 0.95f)
+        {
+            SceneManager.LoadScene("SpaceHub");
+        }
     }
 
     void accelInput(OSCMessage message)
@@ -70,7 +76,6 @@ public class LazerMaster : MonoBehaviour
             {
                 alphaKeyB[1].time -= speed;
             }
-            Debug.Log(alphaKey[1].time);
         }
         
         if (message.Values[0].IntValue == 2 || message.Values[0].IntValue == 4)
@@ -82,7 +87,6 @@ public class LazerMaster : MonoBehaviour
             {
                 alphaKey[1].time -= speed;
             }
-            Debug.Log(alphaKeyB[1].time);
         }
     }
 }

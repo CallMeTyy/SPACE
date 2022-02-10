@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using extOSC;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Valve : MonoBehaviour
@@ -23,6 +25,14 @@ public class Valve : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
+        }
+    }
+
+    private void Update()
+    {
+        if (angle > 420)
+        {
+            SceneManager.LoadScene("SpaceHub");
         }
     }
 

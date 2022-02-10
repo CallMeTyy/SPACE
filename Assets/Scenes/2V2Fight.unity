@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b227575be2f77489c13651c0e15947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalInputAcceleration: 1
+  verticalInputAcceleration: 15
   horizontalInputAcceleration: 387
   maxSpeed: 10
   maxRotationSpeed: 100

@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using extOSC;
+using UnityEngine.SceneManagement;
 
 public class MovementSystem : MonoBehaviour
 {
@@ -24,6 +27,8 @@ public class MovementSystem : MonoBehaviour
     private bool hasShakenPlayer2;
     [SerializeField] private GameObject bullet;
     private float shotTimer;
+
+    private float timer = 10;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,64 +36,60 @@ public class MovementSystem : MonoBehaviour
         _receiver = gameObject.AddComponent<OSCReceiver>();
 
         // Set local port.
-        _receiver.LocalPort = 7001;
+        _receiver.LocalPort = 7204;
 
         // Bind "MessageReceived" method to special address.
-        _receiver.Bind("/player1/quaternion", MessageReceived1);
-        _receiver.Bind("/player2/touch0", MessageReceived2);
-        _receiver.Bind("/player1/accel", ShakeReceived);
-        _receiver.Bind("/player2/accel", ShakeReceived);
+        _receiver.Bind("/player/*/space1", MessageReceived1);
+        _receiver.Bind("/player/*/space2", MessageReceived2);
+        _receiver.Bind("/player/*/spaceshake", ShakeReceived);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (timer > 0) timer -= Time.deltaTime;
+        else SceneManager.LoadScene("SpaceHub");
     }
+
+
     protected void MessageReceived1(OSCMessage message)
     {
-        
-        
-        currentRotation = new Quaternion(0, -message.Values[2].FloatValue, 0, -message.Values[3].FloatValue);
-        //currentRotation.eulerAngles = rotationAmount;
-        print(currentRotation.eulerAngles.y);
-        if ((currentRotation.eulerAngles.y < 80 && currentRotation.eulerAngles.y > 20 )|| (currentRotation.eulerAngles.y < 250 && currentRotation.eulerAngles.y > 190))
+        if (message.Values[0].IntValue == 1)
         {
-            //rotationAmount = (rotationAmount - 250) * Time.deltaTime;
-            //transform.Rotate(0, 0, rotationAmount);
+            currentRotation = new Quaternion(message.Values[1].FloatValue, message.Values[2].FloatValue, 
+                message.Values[3].FloatValue, message.Values[4].FloatValue);
+            
+            if (Mathf.Abs(currentRotation.x) > 0.2f)
+            {
+                zRotationVelocity -= Mathf.Sign(currentRotation.x) * horizontalInputAcceleration;
+            }
+        }
 
-            float zTurnAcceleration = -1 * -1 * horizontalInputAcceleration;
-            zRotationVelocity += zTurnAcceleration * Time.deltaTime;
-        }
-        if ((currentRotation.eulerAngles.y > 100 && currentRotation.eulerAngles.y < 160) || (currentRotation.eulerAngles.y < 330 && currentRotation.eulerAngles.y > 270))
-        {
-            //rotationAmount = (rotationAmount + 250) * Time.deltaTime;
-            //transform.Rotate(0, 0, rotationAmount);
-            float zTurnAcceleration = -1 * 1 * horizontalInputAcceleration;
-            zRotationVelocity += zTurnAcceleration * Time.deltaTime;
-        }
+        //print(currentRotation);
     }
     protected void MessageReceived2(OSCMessage message)
     {
-        //Debug.Log(message.Values[1].DoubleValue);
-        Vector3 acceleration = (float)message.Values[1].DoubleValue * verticalInputAcceleration * transform.forward;
-        velocity += acceleration * Time.deltaTime;
+        Debug.Log(message);
+        if (message.Values[0].IntValue == 2)
+        {
+            Vector3 acceleration = message.Values[1].FloatValue * verticalInputAcceleration * transform.forward;
+            velocity += acceleration * Time.deltaTime;
+        }
     }
     protected void ShakeReceived(OSCMessage message)
     {
-        
-        if (message.Address.Contains("player1"))
+
+        if (message.Values[0].IntValue == 1)
         {
-            Vector3 shakeStrengthP1 = new Vector3(message.Values[0].FloatValue, message.Values[1].FloatValue, message.Values[2].FloatValue);
+            Vector3 shakeStrengthP1 = new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue);
             //print(shakeStrengthP1.magnitude);
             if (shakeStrengthP1.magnitude > 2)
                 StartCoroutine(ShakePlayer1());
          
         }
-        if (message.Address.Contains("player2"))
+        if (message.Values[0].IntValue == 2)
         {
           
-            Vector3 shakeStrengthP2 = new Vector3(message.Values[0].FloatValue, message.Values[1].FloatValue, message.Values[2].FloatValue);
+            Vector3 shakeStrengthP2 = new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue);
             //print(shakeStrengthP2.magnitude);
             if (shakeStrengthP2.magnitude > 2)
                 StartCoroutine(ShakePlayer2());

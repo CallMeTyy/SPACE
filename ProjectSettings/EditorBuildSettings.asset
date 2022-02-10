@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lazer.unity
     guid: 405054e1681c2cc48aaa734e9b2441df
+  - enabled: 1
+    path: Assets/Scenes/2V2Fight.unity
+    guid: fab4564510c469c40bdf4e99c1828ae1
+  - enabled: 1
+    path: Assets/Scenes/SpaceHub.unity
+    guid: 8ca3a99d01e7eb245934192370e0d72e
   m_configObjects: {}
