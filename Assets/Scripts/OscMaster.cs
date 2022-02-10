@@ -23,6 +23,7 @@ public class OscMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         phones = new List<string>();
         ips = new List<string>();
         ports = new List<int>();
@@ -51,10 +52,12 @@ public class OscMaster : MonoBehaviour
     {
         _transmitter.RemoteHost = message.Values[0].StringValue;
         _transmitter.RemotePort = 6969;
-
-        ips.Add(message.Values[0].StringValue);
-        ports.Add(6960 + phones.Count);
-        phones.Add("/player/" + message.Values[1].StringValue);
+        if (!phones.Contains("/player/" + message.Values[1].StringValue))
+        {
+            ips.Add(message.Values[0].StringValue);
+            ports.Add(6960 + phones.Count);
+            phones.Add("/player/" + message.Values[1].StringValue);
+        }
 
         var newMessage = new OSCMessage("/init");
         newMessage.AddValue(OSCValue.String(message.Values[1].StringValue));
@@ -76,6 +79,18 @@ public class OscMaster : MonoBehaviour
     void PlayerRecieved(OSCMessage message)
     {
         //Debug.Log(message);
+        if (message.Address.Contains("disc"))
+        {
+            for(int i = 0; i < phones.Count; i++)
+            {
+                if (phones[i] == message.Values[0].StringValue)
+                {
+                    phones.RemoveAt(i);
+                    ips.RemoveAt(i);
+                    ports.RemoveAt(i);
+                }
+            }
+        }
         string text = "Players\n\n";
         foreach (string pname in phones)
         {
@@ -85,6 +100,7 @@ public class OscMaster : MonoBehaviour
         _players.text = text;
         //if (message.Address.Contains("accel")) handleAccel(message);
         if (message.Address.Contains("quat")) handleQuat(message);
+        
     }
 
     void handleAccel(OSCMessage message)
