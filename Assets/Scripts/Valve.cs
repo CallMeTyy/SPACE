@@ -45,7 +45,7 @@ public class Valve : MonoBehaviour
             _valve.Rotate(0,0,message.Values[1].FloatValue * 4 / (Mathf.Pow(angle, 2) / 20000 + 1));
             angle += -message.Values[1].FloatValue * 4 / (Mathf.Pow(angle, 2) / 20000 + 1);
             _valve.localScale = new Vector3(1 - angle / 9000, 1 - angle / 9000, 0);
-            if (_text != null) _text.text = "Angle: " + angle;
+            if (_text != null) _text.text = "Angle: " + angle + "/420";
         } 
     }
 }

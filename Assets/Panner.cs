@@ -15,6 +15,8 @@ public class Panner : MonoBehaviour
     private Vector2 rightOffsetMax;
     private Vector2 midOffset;
 
+    public float speed = 1;
+
     private void Start()
     {
         images = new List<RectTransform>();
@@ -35,8 +37,8 @@ public class Panner : MonoBehaviour
                 rect.offsetMin = rightOffset;
                 rect.offsetMax = rightOffsetMax;
             }
-            rect.offsetMin += Vector2.left;
-            rect.offsetMax += Vector2.left;
+            rect.offsetMin += Vector2.left * speed;
+            rect.offsetMax += Vector2.left * speed;
         }
     }
 }
