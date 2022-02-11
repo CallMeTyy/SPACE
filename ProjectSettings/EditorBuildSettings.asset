@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpaceHub.unity
     guid: 8ca3a99d01e7eb245934192370e0d72e
+  - enabled: 1
+    path: Assets/Scenes/Fire.unity
+    guid: 5c608df24a653774496357ae5e7a0719
   m_configObjects: {}

@@ -29,7 +29,7 @@ public class SceneMaster : MonoBehaviour
     {
         if (isInHub)
         {
-            GoToScene("Lazer");
+            GoToScene("Fire");
             if (timer > 0) timer -= Time.deltaTime;
             else
                 switch (Random.Range(0, 3))
