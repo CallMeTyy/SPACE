@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 426809299}
   m_Layer: 0
   m_Name: OSCMaster
-  m_TagString: Untagged
+  m_TagString: Master
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98af10c9fe71a8f4d8ebecbca6c9edd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GetSceneIndex: 0
   _players: {fileID: 727707429}
   ip: {fileID: 1313209377}
 --- !u!4 &426809300

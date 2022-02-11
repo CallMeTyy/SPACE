@@ -17,6 +17,8 @@ public class OscMaster : MonoBehaviour
     private List<string> phones;
     private List<int> ports;
 
+    public int GetSceneIndex = 0;
+
     [SerializeField] private Text _players;
     [SerializeField] private Text ip;
     

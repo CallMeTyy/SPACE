@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using extOSC;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FireMaster : MonoBehaviour
@@ -27,6 +28,7 @@ public class FireMaster : MonoBehaviour
     void Fire(OSCMessage message)
     {
         print(message);
-        if (message.Values[1].FloatValue > 0.3f) _slider.value += 0.05f;
+        if (message.Values[1].FloatValue > 0.1f && message.Values[0].IntValue == ID) _slider.value += 0.1f;
+        if (_slider.value >= 1f) SceneManager.LoadScene("SpaceHub");
     }
 }
