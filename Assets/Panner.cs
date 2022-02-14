@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class Panner : MonoBehaviour
 {
     [SerializeField] private RectTransform space;
-    [SerializeField] private RectTransform spaceL;
     [SerializeField] private RectTransform spaceR;
     private List<RectTransform> images;
 
@@ -15,14 +14,18 @@ public class Panner : MonoBehaviour
     private Vector2 rightOffsetMax;
     private Vector2 midOffset;
 
+    public float speed = 1;
+
     private void Start()
     {
         images = new List<RectTransform>();
-        rightOffset = spaceR.offsetMin;
-        rightOffsetMax = spaceR.offsetMax;
+        
+        rightOffset = new Vector2(spaceR.rect.width, 0);
+        rightOffsetMax = new Vector2(spaceR.rect.width, 0);
+        spaceR.offsetMax = rightOffsetMax;
+        spaceR.offsetMin = rightOffset;
         midOffset = space.offsetMin;
         images.Add(space);
-        images.Add(spaceL);
         images.Add(spaceR);
     }
 
@@ -35,8 +38,8 @@ public class Panner : MonoBehaviour
                 rect.offsetMin = rightOffset;
                 rect.offsetMax = rightOffsetMax;
             }
-            rect.offsetMin += Vector2.left;
-            rect.offsetMax += Vector2.left;
+            rect.offsetMin += Vector2.left * speed * Time.deltaTime;
+            rect.offsetMax += Vector2.left * speed * Time.deltaTime;
         }
     }
 }
