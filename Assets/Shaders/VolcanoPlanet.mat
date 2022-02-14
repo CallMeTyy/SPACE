@@ -30,6 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _Occlusion: 1
     - _TessEdgeLength: 16
     - _TessMax: 25
     - _TessMaxDisp: 25
@@ -43,7 +44,7 @@ Material:
     - _TransShadow: 0.5
     - _TransStrength: 1
     - _TransmissionShadow: 0.5
-    - _VertexOffsetStrength: 0.49
+    - _VertexOffsetStrength: 0.28
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _LavaSpeeeeed: {r: -0.05, g: -0.03, b: 0.008, a: -0.01}

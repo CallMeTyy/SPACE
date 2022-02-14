@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.42
+    - _Alpha: 0.56
     - _AlphaCutoff: 0.5
     - _ParallaxHeight1: 0.7
     - _ParallaxHeightmulti1: 1.02
