@@ -66,6 +66,10 @@ public class OscMaster : MonoBehaviour
         }
     }
 
+    public int GetPlayerCount()
+    {
+        return ips.Count;
+    }
 
     void Init(OSCMessage message)
     {
