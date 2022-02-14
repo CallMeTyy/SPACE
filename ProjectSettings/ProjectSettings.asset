@@ -599,7 +599,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: EXTOSC
+    1: EXTOSC;AMPLIFY_SHADER_EDITOR
     7: EXTOSC
     13: EXTOSC
     14: EXTOSC
