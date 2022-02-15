@@ -47,20 +47,21 @@ public class MovementSystem : MonoBehaviour
     private void Update()
     {
         if (timer > 0) timer -= Time.deltaTime;
-        else SceneManager.LoadScene("SpaceHub");
+        //else SceneManager.LoadScene("SpaceHub");
     }
 
 
     protected void MessageReceived1(OSCMessage message)
     {
+        print(message);
         if (message.Values[0].IntValue == 1)
         {
             currentRotation = new Quaternion(message.Values[1].FloatValue, message.Values[2].FloatValue, 
                 message.Values[3].FloatValue, message.Values[4].FloatValue);
             
-            if (Mathf.Abs(currentRotation.x) > 0.2f)
+            if (Mathf.Abs(currentRotation.y) > 0.2f)
             {
-                zRotationVelocity -= Mathf.Sign(currentRotation.x) * horizontalInputAcceleration;
+                zRotationVelocity -= Mathf.Sign(currentRotation.y) * horizontalInputAcceleration;
             }
         }
 
