@@ -61,7 +61,7 @@ Material:
     - _EmissionAmount: 0.46
     - _EmissivePower: 1.03
     - _EmmisionAmount: 0
-    - _Float4: 0
+    - _Float4: 91.71
     - _FresnelBorderPower: 1.8
     - _FresnelBorderValue: 2
     - _FresnelPower: 1.85
@@ -84,8 +84,8 @@ Material:
     - _VertexSmoothness: 0.15
     - __dirty: 1
     m_Colors:
-    - _Cold: {r: 1, g: 0.7081761, b: 0.27044016, a: 0}
-    - _Color0: {r: 1, g: 0.26683086, b: 0.109803915, a: 0}
+    - _Cold: {r: 1, g: 0.7081761, b: 0.2704401, a: 0}
+    - _Color0: {r: 1, g: 0.2668308, b: 0.10980386, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _FresnelBorderColor: {r: 1, g: 0.48742133, b: 0.48742133, a: 0}
     - _FresnelColor: {r: 1, g: 0.7205223, b: 0, a: 1}
