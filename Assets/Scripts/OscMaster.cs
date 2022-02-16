@@ -16,6 +16,7 @@ public class OscMaster : MonoBehaviour
     private List<string> ips;
     private List<string> phones;
     private List<int> ports;
+    public List<int> scores;
 
     public int GetSceneIndex = 0;
 
@@ -28,6 +29,7 @@ public class OscMaster : MonoBehaviour
         phones = new List<string>();
         ips = new List<string>();
         ports = new List<int>();
+        //scores = new List<int>(4);
         _transmitter = gameObject.AddComponent<OSCTransmitter>();
 
         // Set remote host address.
@@ -69,6 +71,17 @@ public class OscMaster : MonoBehaviour
     public int GetPlayerCount()
     {
         return ips.Count;
+    }
+
+    public void AddScore(int firstP, int secondP, int thirdP, int fourthP)
+    {
+        for (int i = 0; i < scores.Count; i++)
+        {
+            if (i == firstP - 1) scores[i] += 5;
+            else if (i == secondP - 1) scores[i] += 3;
+            else if (i == thirdP - 1) scores[i] += 1;
+        }
+        //scores.Sort((a,b)=>a.CompareTo(b));
     }
 
     void Init(OSCMessage message)

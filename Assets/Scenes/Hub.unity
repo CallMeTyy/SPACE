@@ -409,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98af10c9fe71a8f4d8ebecbca6c9edd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scores: 00000000000000000000000000000000
   GetSceneIndex: 0
   _players: {fileID: 727707429}
   ip: {fileID: 1313209377}
@@ -3149,7 +3150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &2024997130
 Light:
   m_ObjectHideFlags: 0
@@ -3161,8 +3162,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.9931085, g: 1, b: 0.80566037, a: 1}
+  m_Intensity: 0.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3219,13 +3220,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024997129}
-  m_LocalRotation: {x: -0.333436, y: -0.5568563, z: 0.25966632, w: -0.7150559}
+  m_LocalRotation: {x: 0.4208554, y: 0.08269237, z: -0.03856008, w: 0.90252745}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 50, y: 435.82, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: 10.47, z: 0}
 --- !u!1 &2075690995
 GameObject:
   m_ObjectHideFlags: 0

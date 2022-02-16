@@ -59,7 +59,11 @@ MonoBehaviour:
     min: 0
   intensity:
     m_OverrideState: 1
+<<<<<<< Updated upstream
     m_Value: 3.33
+=======
+    m_Value: 1.5
+>>>>>>> Stashed changes
     min: 0
   scatter:
     m_OverrideState: 1

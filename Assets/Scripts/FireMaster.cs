@@ -25,13 +25,21 @@ public class FireMaster : MonoBehaviour
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/mic", Fire);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
         }
     }
-    
-    
+
+    public float GetScore()
+    {
+        return fireValue;
+    }
+
+    public int getID()
+    {
+        return ID;
+    }
 
     void Fire(OSCMessage message)
     {
@@ -43,11 +51,6 @@ public class FireMaster : MonoBehaviour
         {
             var col = _s.colorOverLifetime;
             col.color = color;
-        }
-
-        if (fireValue < 0.05f)
-        {
-            SceneManager.LoadScene("SpaceHub");
         }
         if (fireValue < 0.1f)
         {

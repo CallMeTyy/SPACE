@@ -22,7 +22,7 @@ public class Valve : MonoBehaviour
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/valve", RotateValve);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
         }
@@ -34,6 +34,16 @@ public class Valve : MonoBehaviour
         {
             SceneManager.LoadScene("SpaceHub");
         }
+    }
+
+    public int GetID()
+    {
+        return ID;
+    }
+
+    public int GetAngle()
+    {
+        return (int) angle;
     }
 
     void RotateValve(OSCMessage message)
