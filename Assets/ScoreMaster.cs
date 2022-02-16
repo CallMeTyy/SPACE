@@ -56,7 +56,7 @@ public class ScoreMaster : MonoBehaviour
         } else if (scene == "Lazer")
         {
             if (_lazerMaster.GetScore().x > 0.95f)
-            {
+            { 
                 _master.AddScore(1,3);
                 SceneManager.LoadScene("SpaceHub");
             } else if (_lazerMaster.GetScore().x > 0.95f)
