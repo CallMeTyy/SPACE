@@ -84,6 +84,20 @@ public class OscMaster : MonoBehaviour
         //scores.Sort((a,b)=>a.CompareTo(b));
     }
 
+    public void AddScore(int Won1, int Won2)
+    {
+        for (int i = 0; i < scores.Count; i++)
+        {
+            if (i == Won1 - 1) scores[i] += 3;
+            else if (i == Won2 - 1) scores[i] += 3;
+        }
+    }
+
+    public List<int> GetScores()
+    {
+        return scores;
+    }
+
     void Init(OSCMessage message)
     {
         _transmitter.RemoteHost = message.Values[0].StringValue;

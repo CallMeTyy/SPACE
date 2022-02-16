@@ -54,7 +54,7 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Lazer");
                         break;
                     case 3:
-                        GoToScene("2V2Fight");
+                        GoToScene("Win");
                         break;
                     default:
                         timer = Random.Range(2, 5);

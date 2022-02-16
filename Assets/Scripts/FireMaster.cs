@@ -14,7 +14,7 @@ public class FireMaster : MonoBehaviour
     [SerializeField] private Material _mat;
     [SerializeField] private Emergency[] _eLights;
     private float fireValue = 1.0f;
-    private OscMaster _master;
+    private ScoreMaster _master;
     private float CPUInput = 0f;
     private float timeCheck;
 
@@ -22,7 +22,7 @@ public class FireMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _master = GameObject.FindWithTag("Master")?.GetComponent<OscMaster>();
+        _master = GameObject.FindWithTag("Score")?.GetComponent<ScoreMaster>();
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/mic", Fire);
@@ -44,8 +44,15 @@ public class FireMaster : MonoBehaviour
                     timeCheck += Time.deltaTime;
                     if (timeCheck > 0.1f)
                     {
+                        timeCheck = 0;
                         CPUInput = Random.Range(1,11);
                     }
+                    if (CPUInput >= 10)
+                    {
+                        fireValue -= 0.025f;
+                        if (fireValue < 0) fireValue = 0;
+                    }
+                    UpdateFire();
                 }
             }
         }
@@ -54,20 +61,19 @@ public class FireMaster : MonoBehaviour
             if (ID > 1)
             {
                 timeCheck += Time.deltaTime;
-                if (timeCheck > 0.05f)
+                if (timeCheck > 0.1f)
                 {
+                    timeCheck = 0;
                     CPUInput = Random.Range(1,11);
                 }
-
-                if (CPUInput >= 2)
+                if (CPUInput >= 10)
                 {
                     fireValue -= 0.025f;
                     if (fireValue < 0) fireValue = 0;
                 }
+                UpdateFire();
             }
         }
-        
-        
     }
 
     public float GetScore()
@@ -80,10 +86,9 @@ public class FireMaster : MonoBehaviour
         return ID;
     }
 
-    void Fire(OSCMessage message)
+    void UpdateFire()
     {
-        if (message.Values[1].FloatValue > 0.1f && message.Values[0].IntValue == ID && fireValue > 0) fireValue -= 0.025f;
-        if (fireValue < 0) fireValue = 0;
+        
         _mat.SetFloat("_FlameAmount", fireValue - 1);
         if (fireValue <= 0)
         {
@@ -92,5 +97,12 @@ public class FireMaster : MonoBehaviour
                 _l.StopEmergency();
             }
         }
+    }
+
+    void Fire(OSCMessage message)
+    {
+        if (message.Values[1].FloatValue > 0.1f && message.Values[0].IntValue == ID && fireValue > 0) fireValue -= 0.025f;
+        if (fireValue < 0) fireValue = 0;
+        UpdateFire();
     }
 }
