@@ -35,7 +35,11 @@ public class SceneMaster : MonoBehaviour
     {
         if (isInHub)
         {
-            if (timer > 0) timer -= Time.deltaTime;
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                if (timer > 3) ; //DoShitWithAlarm
+            }
             else
             {
                 switch (master.GetSceneIndex)

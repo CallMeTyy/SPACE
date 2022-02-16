@@ -37,6 +37,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Speed: 1.18
     - Sun_Size: 0.76
     m_Colors:
     - _SunDirection: {r: 0.5, g: 0.5, b: 0.5, a: 0}
