@@ -29,7 +29,7 @@ public class ScoreMaster : MonoBehaviour
                 scores[i] = new Vector2(_firePlayers[i].getID(),_firePlayers[i].GetScore());
             }
             scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-            if (_master != null && scores[0].y < 0.05f)
+            if (_master != null && scores[2].y < 0.05f)
             {
                 _master.AddScore((int) scores[0].x, (int) scores[1].x, (int) scores[2].x, (int) scores[3].x);
                 SceneManager.LoadScene("SpaceHub");
