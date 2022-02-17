@@ -29,7 +29,7 @@ Material:
     - _Speed: 7.52
     - _StutterSpeed: 3.24
     - _YScale: 1.63
-    - _isStuttering: 1
+    - _isStuttering: 0
     m_Colors:
     - _Color: {r: 0.9716981, g: 0.6122836, b: 0.27195302, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
