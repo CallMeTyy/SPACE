@@ -15,6 +15,6 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        print(anim.GetBool("isBreaking"));
     }
 }

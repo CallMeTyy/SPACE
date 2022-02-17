@@ -5,6 +5,7 @@ using extOSC;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
 public class SceneMaster : MonoBehaviour
@@ -15,6 +16,8 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Image _img;
     [SerializeField] private Color _color;
     [SerializeField] private float _blinkSpeed;
+    [SerializeField] private Material[] _mat;
+    [SerializeField] private Animator[] anim;
     private int a;
     float index2;
     float amplitudeX = 10.0f;
@@ -34,7 +37,10 @@ public class SceneMaster : MonoBehaviour
         {
             timer = Random.Range(8, 12);
         }
-
+        for (int i = 0; i < _mat.Length; i++)
+        {
+            _mat[i].SetFloat("_isStuttering", 0);
+        }
         master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
     }
 
@@ -47,11 +53,16 @@ public class SceneMaster : MonoBehaviour
                 timer -= Time.deltaTime;
                 if (timer < 3.14f)
                 {
-                    //float a = amplitudeX * Mathf.Cos(omegaX * index2);
+                    
                     _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
-
+                    for (int i = 0; i < _mat.Length; i++)
+                    {
+                        anim[i].SetBool("isBreaking", true);
+                        if (_mat[i].GetFloat("_isStuttering") == 0)
+                            _mat[i].SetFloat("_isStuttering", 1);
+            
+                    }
                 }
-                
             }
             else
             {

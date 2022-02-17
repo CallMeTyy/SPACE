@@ -27,9 +27,9 @@ Material:
     - _FlameAmount: 0
     - _PosterizePower: 102
     - _Speed: 7.52
-    - _StutterSpeed: 1.09
+    - _StutterSpeed: 3
     - _YScale: 1.63
-    - _isStuttering: 0
+    - _isStuttering: 1
     m_Colors:
     - _Color: {r: 0.972549, g: 0.27058822, b: 0.8612255, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
