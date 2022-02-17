@@ -19,8 +19,8 @@ public class PlayerMaster : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             targetX[i] = _players[i].position.x + _master.GetScores()[i] / 7f;
-            targetY[i] = _players[i].position.y;
-            deftargetY[i] = _players[i].position.y;
+            //targetY[i] = _players[i].position.y;
+            //deftargetY[i] = _players[i].position.y;
             print(targetX[i]);
         }
     }
@@ -38,7 +38,7 @@ public class PlayerMaster : MonoBehaviour
                 targetY[i] = deftargetY[i] + Random.Range(-0.1f, 0.1f);
             }
             pos.x = targetX[i];
-            pos.y = targetY[i];
+            //pos.y = targetY[i];
             _players[i].position = _players[i].position * 0.98f + 0.02f * pos;
         }
     }

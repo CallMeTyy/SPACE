@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using extOSC;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -11,7 +12,13 @@ public class SceneMaster : MonoBehaviour
     private bool isInHub;
     private float timer;
     private int index;
-
+    [SerializeField] private Image _img;
+    [SerializeField] private Color _color;
+    [SerializeField] private float _blinkSpeed;
+    private int a;
+    float index2;
+    float amplitudeX = 10.0f;
+    float omegaX = 1.0f;
     private OscMaster master;
     public void GoToScene(string sceneName)
     {
@@ -25,7 +32,7 @@ public class SceneMaster : MonoBehaviour
 
         if (isInHub)
         {
-            timer = Random.Range(2, 5);
+            timer = Random.Range(8, 12);
         }
 
         master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
@@ -38,7 +45,13 @@ public class SceneMaster : MonoBehaviour
             if (timer > 0)
             {
                 timer -= Time.deltaTime;
-                if (timer > 3) ; //DoShitWithAlarm
+                if (timer < 3.14f)
+                {
+                    //float a = amplitudeX * Mathf.Cos(omegaX * index2);
+                    _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
+
+                }
+                
             }
             else
             {
@@ -57,7 +70,7 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Win");
                         break;
                     default:
-                        timer = Random.Range(2, 5);
+                        timer = Random.Range(8, 12);
                         break;
                 }
                 master.GetSceneIndex++;

@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpaceHub.unity
     guid: d375036d723c5854a94e59ac41116e15
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: f87cae7808bb33347ba8863361d661d3
   m_configObjects: {}

@@ -6,12 +6,14 @@ using extOSC;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.VFX;
 
 public class FireMaster : MonoBehaviour
 {
     private OSCReceiver _receiver;
     private int ID = -1;
     [SerializeField] private Material _mat;
+    [SerializeField] private VisualEffect[] _vfx;
     [SerializeField] private Emergency[] _eLights;
     private float fireValue = 1.0f;
     private ScoreMaster _master;
@@ -90,6 +92,8 @@ public class FireMaster : MonoBehaviour
     {
         
         _mat.SetFloat("_FlameAmount", fireValue - 1);
+        for (int i = 0; i < _vfx.Length; i++)
+        _vfx[i].SetFloat("SpawnRate", fireValue - 1);
         if (fireValue <= 0)
         {
             foreach (Emergency _l in _eLights)
