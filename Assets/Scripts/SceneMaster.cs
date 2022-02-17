@@ -8,8 +8,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(AudioSource))]
 public class SceneMaster : MonoBehaviour
 {
+    AudioSource audioData;
+
     private bool isInHub;
     private float timer;
     private int index;
@@ -23,6 +26,7 @@ public class SceneMaster : MonoBehaviour
     float amplitudeX = 10.0f;
     float omegaX = 1.0f;
     private OscMaster master;
+    
     public void GoToScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -30,6 +34,8 @@ public class SceneMaster : MonoBehaviour
 
     private void Start()
     {
+        audioData = GetComponent<AudioSource>();
+
         if (SceneManager.GetActiveScene().name == "SpaceHub") isInHub = true;
         else isInHub = false;
 
@@ -40,6 +46,7 @@ public class SceneMaster : MonoBehaviour
         for (int i = 0; i < _mat.Length; i++)
         {
             _mat[i].SetFloat("_isStuttering", 0);
+
         }
         master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
     }
@@ -48,12 +55,15 @@ public class SceneMaster : MonoBehaviour
     {
         if (isInHub)
         {
+
             if (timer > 0)
             {
+
                 timer -= Time.deltaTime;
                 if (timer < 3.14f)
                 {
-                    
+                    if (!audioData.isPlaying) audioData.Play();
+
                     _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
                     for (int i = 0; i < _mat.Length; i++)
                     {
@@ -62,6 +72,7 @@ public class SceneMaster : MonoBehaviour
                             _mat[i].SetFloat("_isStuttering", 1);
             
                     }
+
                 }
             }
             else
