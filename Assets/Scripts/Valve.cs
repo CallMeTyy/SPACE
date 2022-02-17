@@ -6,6 +6,7 @@ using extOSC;
 using Unity.Mathematics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
 public class Valve : MonoBehaviour
@@ -15,6 +16,7 @@ public class Valve : MonoBehaviour
     private OSCReceiver _receiver;
     private OscMaster _master;
     [SerializeField] private Light _light;
+    [SerializeField] private VisualEffect _vfx;
 
     private int ID = -1;
     private float angle = 0;
@@ -104,6 +106,7 @@ public class Valve : MonoBehaviour
     void UpdateValve()
     {
         angle = 0.7f * angle + 0.3f * targetAngle;
+        _vfx.SetFloat("SpawnRate", angle);
         if (angle < 1800)
         {
             _valve.localRotation = quaternion.Euler(-angle / 45,0,0);
