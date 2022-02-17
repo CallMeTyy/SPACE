@@ -18,7 +18,7 @@ public class PlayerMaster : MonoBehaviour
         _master = GameObject.FindWithTag("Master")?.GetComponent<OscMaster>();
         for (int i = 0; i < 4; i++)
         {
-            targetX[i] = _players[i].position.x + _master.GetScores()[i] / 7f;
+            targetX[i] = _players[i].position.x + _master.GetScores()[i] / 13f * 7f;
             //targetY[i] = _players[i].position.y;
             //deftargetY[i] = _players[i].position.y;
             print(targetX[i]);

@@ -53,6 +53,7 @@ public class LazerMaster : MonoBehaviour
                     for (int i = _master.GetPlayerCount() + 1; i <= 4; i++)
                     {
                         CPUInput = Random.Range(1, 11);
+                        if (i == 1) CPUInput = Random.Range(1, 3);
                         if (CPUInput >= 2)
                         {
                             CPUStuff(i);
