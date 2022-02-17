@@ -29,6 +29,9 @@ public class MovementSystem : MonoBehaviour
     private float shotTimer;
 
     private float timer = 10;
+
+    private int IDs;
+    private int IDa;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +45,11 @@ public class MovementSystem : MonoBehaviour
         _receiver.Bind("/player/*/space1", MessageReceived1);
         _receiver.Bind("/player/*/space2", MessageReceived2);
         _receiver.Bind("/player/*/spaceshake", ShakeReceived);
+
+        if (gameObject.name.Contains("1")) IDs = 1;
+        else IDs = 2;
+        if (gameObject.name.Contains("3")) IDa = 2;
+        else IDa = 4;
     }
 
     private void Update()
@@ -54,7 +62,7 @@ public class MovementSystem : MonoBehaviour
     protected void MessageReceived1(OSCMessage message)
     {
         print(message);
-        if (message.Values[0].IntValue == 1)
+        if (message.Values[0].IntValue == IDs)
         {
             currentRotation = new Quaternion(message.Values[1].FloatValue, message.Values[2].FloatValue, 
                 message.Values[3].FloatValue, message.Values[4].FloatValue);
@@ -70,7 +78,7 @@ public class MovementSystem : MonoBehaviour
     protected void MessageReceived2(OSCMessage message)
     {
         Debug.Log(message);
-        if (message.Values[0].IntValue == 2)
+        if (message.Values[0].IntValue == IDa)
         {
             Vector3 acceleration = message.Values[1].FloatValue * verticalInputAcceleration * transform.forward;
             velocity += acceleration * Time.deltaTime;
@@ -79,7 +87,7 @@ public class MovementSystem : MonoBehaviour
     protected void ShakeReceived(OSCMessage message)
     {
 
-        if (message.Values[0].IntValue == 1)
+        if (message.Values[0].IntValue == IDs)
         {
             Vector3 shakeStrengthP1 = new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue);
             //print(shakeStrengthP1.magnitude);
@@ -87,7 +95,7 @@ public class MovementSystem : MonoBehaviour
                 StartCoroutine(ShakePlayer1());
          
         }
-        if (message.Values[0].IntValue == 2)
+        if (message.Values[0].IntValue == IDa)
         {
           
             Vector3 shakeStrengthP2 = new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue);
