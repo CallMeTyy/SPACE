@@ -47,14 +47,14 @@ public class Valve : MonoBehaviour
                 if (ID > _master.GetPlayerCount())
                 {
                     timeCheck += Time.deltaTime;
-                    if (timeCheck > 0.1f)
+                    if (timeCheck > 0.025f)
                     {
                         timeCheck = 0;
                         CPUInput = Random.Range(1,11);
                     }
                     if (CPUInput >= 2)
                     {
-                        targetAngle += Random.Range(0, 4.0f);
+                        targetAngle += Random.Range(0, 10.0f);
                     }
                     UpdateValve();
                 }
@@ -65,14 +65,14 @@ public class Valve : MonoBehaviour
             if (ID > 1)
             {
                 timeCheck += Time.deltaTime;
-                if (timeCheck > 0.1f)
+                if (timeCheck > 0.025f)
                 {
                     timeCheck = 0;
                     CPUInput = Random.Range(1,11);
                 }
                 if (CPUInput >= 2)
                 {
-                    targetAngle += Random.Range(0, 4.0f);
+                    targetAngle += Random.Range(0, 10.0f);
                 }
                 UpdateValve();
             }
