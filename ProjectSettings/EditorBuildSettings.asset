@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MiniValve.unity
     guid: 8be8c76131808f048b7987256b308ef5
   - enabled: 1
-    path: Assets/Scenes/Lazer.unity
+    path: Assets/Scenes/LazerOld.unity
     guid: 405054e1681c2cc48aaa734e9b2441df
   - enabled: 1
     path: Assets/Scenes/2V2Fight.unity
@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SpaceHub.unity
     guid: d375036d723c5854a94e59ac41116e15
   - enabled: 1
+    path: Assets/Scenes/Lazer.unity
+    guid: b1b4d48028614fd4c9bf3f1cad7e7b32
+  - enabled: 1
     path: Assets/Scenes/Win.unity
-    guid: f87cae7808bb33347ba8863361d661d3
+    guid: b950034f2d201b24c9ec3d1b45ac3df3
   m_configObjects: {}

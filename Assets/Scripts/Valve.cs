@@ -62,7 +62,7 @@ public class Valve : MonoBehaviour
         }
         else
         {
-            if (ID > 3)
+            if (ID > 1)
             {
                 timeCheck += Time.deltaTime;
                 if (timeCheck > 0.1f)

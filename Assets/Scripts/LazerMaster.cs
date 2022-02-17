@@ -6,18 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class LazerMaster : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _red;
-    [SerializeField] private ParticleSystem _blue;
-    private GradientColorKey[] colorKey;
-    private GradientAlphaKey[] alphaKey;
-    private GradientAlphaKey[] alphaKeyB;
-    private Gradient color;
-    private Gradient colorB;
+    [SerializeField] private Transform _t13;
+    [SerializeField] private Transform _t24;
+    public float T1Score;
+    public float T2Score;
     private OSCReceiver _receiver;
 
     private OscMaster _master;
 
-    private float speed = 0.01f;
+    private float speed = 0.0025f;
     private float timeCheck;
     private int CPUInput;
 
@@ -28,41 +25,19 @@ public class LazerMaster : MonoBehaviour
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/laser", accelInput);
-
-        color = new Gradient();
-        colorB = new Gradient();
-        colorKey = new GradientColorKey[2];
-        alphaKey = new GradientAlphaKey[2];
-        alphaKeyB = new GradientAlphaKey[2];
-
-        colorKey[0].color = Color.white;
-        colorKey[1].color = Color.white;
-        colorKey[0].time = 0;
-        colorKey[1].time = 1.0f;
-
-        alphaKey[0].alpha = 1.0f;
-        alphaKey[1].alpha = 0.0f;
-        alphaKey[0].time = 0;
-        alphaKey[1].time = 0.01f;
-
-        alphaKeyB[0].alpha = 1.0f;
-        alphaKeyB[1].alpha = 0.0f;
-        alphaKeyB[0].time = 0;
-        alphaKeyB[1].time = 0.01f;
-
-        color.SetKeys(colorKey, alphaKey);
     }
 
     // Update is called once per frame
     void Update()
     {
         CPU();
-        color.SetKeys(colorKey, alphaKey);
-        colorB.SetKeys(colorKey, alphaKeyB);
-        var col = _blue.colorOverLifetime;
-        col.color = color;
-        var redCol = _red.colorOverLifetime;
-        redCol.color = colorB;
+        _t13.localScale = new Vector3(map(T1Score, 0, 1, 0.008f, 0.12f), 0.2f, 0.1f);
+        _t24.localScale = new Vector3(map(T2Score, 0, 1, 0.008f, 0.12f), 0.2f, 0.1f);
+    }
+    
+    public float map(float x, float in_min, float in_max, float out_min, float out_max)
+    {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     void CPU()
@@ -118,7 +93,7 @@ public class LazerMaster : MonoBehaviour
 
     public Vector2 GetScore()
     {
-        return new Vector2(alphaKey[1].time, alphaKeyB[1].time);
+        return new Vector2(T1Score, T2Score);
     }
 
     void accelInput(OSCMessage message)
@@ -127,10 +102,10 @@ public class LazerMaster : MonoBehaviour
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)
                 .magnitude > 4)
-                alphaKey[1].time += speed;
-            if (alphaKey[1].time + alphaKeyB[1].time >= 1)
+                T1Score += speed;
+            if (T1Score + T2Score >= 1)
             {
-                alphaKeyB[1].time -= speed;
+                T2Score -= speed;
             }
         }
 
@@ -138,10 +113,10 @@ public class LazerMaster : MonoBehaviour
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)
                 .magnitude > 4)
-                alphaKeyB[1].time += speed;
-            if (alphaKey[1].time + alphaKeyB[1].time >= 1)
+                T2Score += speed;
+            if (T1Score + T2Score >= 1)
             {
-                alphaKey[1].time -= speed;
+                T1Score -= speed;
             }
         }
     }

@@ -59,7 +59,7 @@ public class ScoreMaster : MonoBehaviour
             { 
                 _master.AddScore(1,3);
                 SceneManager.LoadScene("SpaceHub");
-            } else if (_lazerMaster.GetScore().x > 0.95f)
+            } else if (_lazerMaster.GetScore().y > 0.95f)
             {
                 _master.AddScore(2,4);
                 SceneManager.LoadScene("SpaceHub");

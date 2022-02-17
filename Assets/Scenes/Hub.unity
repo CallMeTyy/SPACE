@@ -271,6 +271,8 @@ MonoBehaviour:
   _img: {fileID: 0}
   _color: {r: 0, g: 0, b: 0, a: 0}
   _blinkSpeed: 0
+  _mat: []
+  anim: []
 --- !u!4 &281679914
 Transform:
   m_ObjectHideFlags: 0
@@ -1967,7 +1969,7 @@ MonoBehaviour:
   isGlobal: 1
   priority: 0
   blendDistance: 0
-  weight: 1
+  weight: 0.699
   sharedProfile: {fileID: 11400000, guid: 4b13705b4e2b44948b1196581971ee60, type: 2}
 --- !u!4 &994057115
 Transform:
