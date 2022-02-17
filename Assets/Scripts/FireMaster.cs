@@ -105,7 +105,7 @@ public class FireMaster : MonoBehaviour
 
     void Fire(OSCMessage message)
     {
-        if (message.Values[1].FloatValue > 0.1f && message.Values[0].IntValue == ID && fireValue > 0) fireValue -= 0.025f;
+        if (message.Values[1].FloatValue > 0.1f && message.Values[0].IntValue == ID && fireValue > 0) fireValue -= 0.06f * message.Values[1].FloatValue;
         if (fireValue < 0) fireValue = 0;
         UpdateFire();
     }
