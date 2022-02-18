@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
+using UnityEngine.Audio;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(AudioSource))]
@@ -26,7 +27,7 @@ public class SceneMaster : MonoBehaviour
     float amplitudeX = 10.0f;
     float omegaX = 1.0f;
     private OscMaster master;
-    
+
     public void GoToScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -80,6 +81,7 @@ public class SceneMaster : MonoBehaviour
                 switch (master.GetSceneIndex)
                 {
                     case 0:
+                        
                         GoToScene("Fire");
                         break;
                     case 1:
