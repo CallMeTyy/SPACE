@@ -2009,7 +2009,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":-2432090755550338912,"guid":"0ee480f5b15515c4bb91cd131d23db80","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":-2432090755550338912,"guid":"6c7b32fd020c9b745849e369a2cc4fdc","type":3}}'
     m_Space: 2147483647
   m_Property:
     name: mesh
