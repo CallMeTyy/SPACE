@@ -22,7 +22,15 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private float _blinkSpeed;
     [SerializeField] private Material[] _mat;
     [SerializeField] private Animator[] anim;
-    private bool isPlayingAlarm;
+    [SerializeField] private Text _clock;
+    [SerializeField] private GameObject _warnin;
+    [SerializeField] private Sprite[] icons;
+    [SerializeField] private Image inputIcon;
+    [SerializeField] private Text _gameText;
+    private int a;
+    float index2;
+    float amplitudeX = 10.0f;
+    float omegaX = 1.0f;
     private OscMaster master;
 
     public void GoToScene(string sceneName)
@@ -39,7 +47,7 @@ public class SceneMaster : MonoBehaviour
 
         if (isInHub)
         {
-            timer = Random.Range(12, 16);
+            timer = Random.Range(8, 12) + 3;
         }
         for (int i = 0; i < _mat.Length; i++)
         {
@@ -58,7 +66,7 @@ public class SceneMaster : MonoBehaviour
             {
 
                 timer -= Time.deltaTime;
-                if (timer < 6f)
+                if (timer < 6.14f && index != 3)
                 {
                     if (!audioData.isPlaying) audioData.Play();
 
@@ -68,11 +76,38 @@ public class SceneMaster : MonoBehaviour
                         anim[i].SetBool("isBreaking", true);
                         if (_mat[i].GetFloat("_isStuttering") == 0)
                             _mat[i].SetFloat("_isStuttering", 1);
-                        
                     }
-                    if (!isPlayingAlarm)
-                        AudioManager.instance.Play("Alarm"); isPlayingAlarm = true;
+                    
 
+                    if (timer < 3f)
+                    {
+                        if (!_warnin.activeSelf)
+                        {
+                            _warnin.SetActive(true);
+                            switch (master.GetSceneIndex)
+                            {
+                                case 0:
+                                    inputIcon.sprite = icons[0];
+                                    _gameText.text = "Blow out the Fire!";
+                                    break;
+                                case 1:
+                                    inputIcon.sprite = icons[1];
+                                    _gameText.text = "Rotate your phone to close the valve!";
+                                    break;
+                                case 2:
+                                    inputIcon.sprite = icons[2];
+                                    _gameText.text = "Shake to power up the lazer!";
+                                    break;
+                                case 3:
+                                    inputIcon.sprite = icons[3];
+                                    _gameText.text = "Clean the window with touch input!";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        _clock.text = "" + Mathf.Clamp((int) timer + 1, 1, 3);
+                    }
                 }
                 else { isPlayingAlarm = false; }
             }
@@ -81,7 +116,6 @@ public class SceneMaster : MonoBehaviour
                 switch (master.GetSceneIndex)
                 {
                     case 0:
-                        
                         GoToScene("Fire");
                         break;
                     case 1:
@@ -91,6 +125,9 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Lazer");
                         break;
                     case 3:
+                        GoToScene("Window");
+                        break;
+                    case 4:
                         GoToScene("Win");
                         break;
                     default:
@@ -99,9 +136,6 @@ public class SceneMaster : MonoBehaviour
                 }
                 master.GetSceneIndex++;
             }
-                
-
-            
         }
     }
 }

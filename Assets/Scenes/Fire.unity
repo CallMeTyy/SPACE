@@ -628,7 +628,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.3
+  m_fontSize: 15.5
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1577,6 +1577,7 @@ GameObject:
   - component: {fileID: 324466276}
   - component: {fileID: 324466275}
   - component: {fileID: 324466274}
+  - component: {fileID: 324466278}
   m_Layer: 5
   m_Name: Canvas UI
   m_TagString: Untagged
@@ -1669,6 +1670,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &324466278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324466273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6765b4066ea425948a5f0e95ce1e876d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players:
+  - {fileID: 564089458}
+  - {fileID: 1213884811}
+  - {fileID: 59523052}
+  - {fileID: 1315743696}
 --- !u!1 &342064231
 GameObject:
   m_ObjectHideFlags: 0
@@ -3213,7 +3231,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.2
+  m_fontSize: 16.55
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6544,7 +6562,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.65
+  m_fontSize: 15.9
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7016,7 +7034,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.45
+  m_fontSize: 15.7
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1

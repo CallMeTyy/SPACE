@@ -60,6 +60,7 @@ public class AudioManager : MonoBehaviour
                 break;
             case "Win":
                 stopSound();
+                Play("Lobby");
                 break;
         }
     }

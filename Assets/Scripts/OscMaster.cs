@@ -15,13 +15,16 @@ public class OscMaster : MonoBehaviour
     private OSCReceiver _receiver;
     public List<string> ips;
     public List<string> phones;
+    public List<string> names;
     private List<int> ports;
     public List<int> scores;
+    
 
     public int GetSceneIndex = 0;
 
     [SerializeField] private Text _players;
     [SerializeField] private Text ip;
+    [SerializeField] private TextMeshProUGUI[] playernames;
     
     void Start()
     {
@@ -45,6 +48,8 @@ public class OscMaster : MonoBehaviour
 
         // Bind "MessageReceived" method to special address.
         _receiver.Bind("/init", Init);
+        
+        _receiver.Bind("/name", Name);
 
         _receiver.Bind("/player/*", PlayerRecieved);
 
@@ -67,6 +72,11 @@ public class OscMaster : MonoBehaviour
             print(_transmitter.RemoteHost);
             _transmitter.Send(message);
         }
+    }
+
+    public string[] GetNames()
+    {
+        return names.ToArray();
     }
 
     public int GetPlayerCount()
@@ -117,6 +127,13 @@ public class OscMaster : MonoBehaviour
 
         Debug.Log(message.Values[0].StringValue);
         Debug.Log(phones.Count);
+    }
+    
+    void Name(OSCMessage message)
+    {
+        print(message);
+        names[message.Values[0].IntValue - 1] = message.Values[1].StringValue;
+        playernames[message.Values[0].IntValue - 1].text = message.Values[1].StringValue;
     }
     
     public string GetLocalIPv4()

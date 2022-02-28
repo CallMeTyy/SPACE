@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class IdleWalk : MonoBehaviour
@@ -10,6 +11,7 @@ public class IdleWalk : MonoBehaviour
     private Animator _animator;
     private OscMaster _master;
     private SpriteRenderer _renderer;
+    private TextMeshProUGUI _playerName;
     private int ID;
     
     // Start is called before the first frame update
@@ -22,6 +24,7 @@ public class IdleWalk : MonoBehaviour
         scale = transform.localScale.x;
         _animator = GetComponent<Animator>();
         _master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
+        _playerName = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -38,9 +41,10 @@ public class IdleWalk : MonoBehaviour
             _animator.SetBool("walking", true);
             float dir;
             if (targetX > transform.position.x) dir = 1;
-            else dir = -1;
+            else{ dir = -1;}
             transform.Translate( dir * Time.deltaTime, 0, 0);
             transform.localScale = new Vector3(scale * dir, scale, 1);
+            _playerName.rectTransform.localScale = new Vector3(dir, 1, 1);
         }
             
         else if (targetX != 10)
