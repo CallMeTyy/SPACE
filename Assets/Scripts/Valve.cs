@@ -40,7 +40,7 @@ public class Valve : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_master != null)
         {
@@ -49,16 +49,15 @@ public class Valve : MonoBehaviour
                 if (ID > _master.GetPlayerCount())
                 {
                     timeCheck += Time.deltaTime;
-                    if (timeCheck > 0.025f)
+                    if (timeCheck > 0.1f)
                     {
                         timeCheck = 0;
                         CPUInput = Random.Range(1,11);
                     }
-                    if (CPUInput >= 2)
+                    if (CPUInput >= 4)
                     {
-                        targetAngle += Random.Range(0, 10.0f);
+                        targetAngle += Random.Range(0, 4.0f);
                     }
-                    UpdateValve();
                 }
             }
         }
@@ -67,18 +66,18 @@ public class Valve : MonoBehaviour
             if (ID > 1)
             {
                 timeCheck += Time.deltaTime;
-                if (timeCheck > 0.025f)
+                if (timeCheck > 0.1f)
                 {
                     timeCheck = 0;
                     CPUInput = Random.Range(1,11);
                 }
-                if (CPUInput >= 2)
+                if (CPUInput >= 4)
                 {
-                    targetAngle += Random.Range(0, 10.0f);
+                    targetAngle += Random.Range(0, 4.0f);
                 }
-                UpdateValve();
             }
         }
+        UpdateValve();
     }
 
     public int GetID()
@@ -98,9 +97,8 @@ public class Valve : MonoBehaviour
             //_valve.localRotation = Quaternion.Euler(0,0,new Quaternion(message.Values[1].FloatValue,
             //    message.Values[2].FloatValue,message.Values[3].FloatValue,message.Values[4].FloatValue).eulerAngles.z);
             //_valve.Rotate(0,0,message.Values[1].FloatValue * 4 / (Mathf.Pow(angle, 2) / 20000 + 1));
-            targetAngle += -message.Values[1].FloatValue * 2;// / (Mathf.Pow(angle, 2) / 20000 + 1);
-            UpdateValve();
-        } 
+            targetAngle += -message.Values[1].FloatValue * 4;// / (Mathf.Pow(angle, 2) / 20000 + 1);
+        }
     }
 
     void UpdateValve()

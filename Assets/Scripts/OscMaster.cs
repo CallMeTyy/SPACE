@@ -13,8 +13,8 @@ public class OscMaster : MonoBehaviour
 {
     private OSCTransmitter _transmitter;
     private OSCReceiver _receiver;
-    private List<string> ips;
-    private List<string> phones;
+    public List<string> ips;
+    public List<string> phones;
     private List<int> ports;
     public List<int> scores;
 
@@ -64,6 +64,7 @@ public class OscMaster : MonoBehaviour
             _transmitter.RemoteHost = ips[i];
             _transmitter.RemotePort = ports[i];
             print(message);
+            print(_transmitter.RemoteHost);
             _transmitter.Send(message);
         }
     }

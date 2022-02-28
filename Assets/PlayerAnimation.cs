@@ -11,10 +11,5 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.speed = Random.Range(0.9f,1.6f);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        print(anim.GetBool("isBreaking"));
-    }
+    
 }
