@@ -506,6 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98af10c9fe71a8f4d8ebecbca6c9edd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ips: []
+  phones: []
   scores: 00000000000000000000000000000000
   GetSceneIndex: 0
   _players: {fileID: 727707429}
@@ -3297,6 +3299,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Lobby
     clip: {fileID: 8300000, guid: a5763f37592130a4aadac8c25821f2fc, type: 3}
+    outputAudioMixerGroup: {fileID: 0}
+    volume: 0.5
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Alarm
+    clip: {fileID: 8300000, guid: ffd10406356eab94eb10e47958c43492, type: 3}
     outputAudioMixerGroup: {fileID: 0}
     volume: 0.5
     pitch: 1

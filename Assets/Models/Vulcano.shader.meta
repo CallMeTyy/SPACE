@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 97222eed4f00a1f4bb4deef64efe2473
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _vulc_VulcanoSurface_Height: {fileID: 2800000, guid: ed829ee999fb35d40af802c5d284b624, type: 3}
+  - _vulc_VulcanoSurface_Normal: {fileID: 2800000, guid: 41a9dd1b5d0d1ac46b3fabd0588aea83, type: 3}
+  - _vulc_VulcanoSurface_BaseColor: {fileID: 2800000, guid: 87c31a85b8faeac46bcff2c3ca65f78e, type: 3}
+  - _vulc_VulcanoSurface_Metallic: {fileID: 2800000, guid: 9793d17e9e0554a47b3e13980d0ac195, type: 3}
+  - _vulc_VulcanoSurface_Roughness: {fileID: 2800000, guid: b54dbc275daaedc4b85b5d00764a8f0e, type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

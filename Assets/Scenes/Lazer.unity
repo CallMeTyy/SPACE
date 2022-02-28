@@ -5018,7 +5018,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.2
+  m_fontSize: 10.8
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5469,7 +5469,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283750972}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 1bd176416da8632458a14aae194a54a4, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 0028569591b80754582b2430cd4bbe23, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -15401,7 +15401,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596788395}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 72e7b7bac627b7a43a378d7c45fc30ee, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: a6eabe5880bdd6e4d9c912e262acea18, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -15538,7 +15538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &725723297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25386,7 +25386,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 812872913}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 74f03ef080e83ee49b5e45d181234c0e, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: fa630e3ae47f0d2429bdeec144f19aa2, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -25496,7 +25496,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831408673}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 46197a7feb055f24cb0d673d479edbb5, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 08e818761dfcf33459d828f03020b93a, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -30517,7 +30517,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.15
+  m_fontSize: 10.75
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -30634,7 +30634,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1310489765}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: dc5369ada68bb4745a28b5b842efbce7, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 5cd5c89a7c646164c8d645f8facb2075, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -31023,7 +31023,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557434280}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: a3c7565fdf1a24243b44cc460024cbe1, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 28adfd50a5d029a4ea142d646a30cdce, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -31150,7 +31150,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.4
+  m_fontSize: 10.95
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -36625,7 +36625,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.05
+  m_fontSize: 11.45
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1

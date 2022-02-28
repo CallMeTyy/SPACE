@@ -1,22 +1,17 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader "FlowMap"
+Shader "Vulcano"
 {
 	Properties
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		[ASEBegin]_Flowmap("Flowmap", 2D) = "white" {}
-		_Speed("Speed", Float) = 1
-		_Diffuse("Diffuse", 2D) = "white" {}
-		_Emmisive("Emmisive", 2D) = "white" {}
-		[Normal]_Normals("Normals", 2D) = "white" {}
-		_Tiling("Tiling", Float) = 1
-		_Smoothness("Smoothness", Float) = 0
-		_Metallic("Metallic", Float) = 0
-		_Strength("Strength", Float) = 1
-		[HDR]_EmmisionColor("Emmision Color", Color) = (0,0,0,0)
-		[ASEEnd]_OffsetStrength("OffsetStrength", Float) = 1
+		[ASEBegin]_vulc_VulcanoSurface_BaseColor("vulc_VulcanoSurface_BaseColor", 2D) = "white" {}
+		_vulc_VulcanoSurface_Height("vulc_VulcanoSurface_Height", 2D) = "white" {}
+		_vulc_VulcanoSurface_Metallic("vulc_VulcanoSurface_Metallic", 2D) = "white" {}
+		_vulc_VulcanoSurface_Normal("vulc_VulcanoSurface_Normal", 2D) = "white" {}
+		[ASEEnd]_vulc_VulcanoSurface_Roughness("vulc_VulcanoSurface_Roughness", 2D) = "white" {}
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 		//_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
 		//_TransStrength( "Trans Strength", Range( 0, 50 ) ) = 1
@@ -26,7 +21,7 @@ Shader "FlowMap"
 		//_TransAmbient( "Trans Ambient", Range( 0, 1 ) ) = 0.1
 		//_TransShadow( "Trans Shadow", Range( 0, 1 ) ) = 0.5
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
-		_TessValue( "Max Tessellation", Range( 1, 32 ) ) = 16
+		//_TessValue( "Tess Max Tessellation", Range( 1, 32 ) ) = 16
 		//_TessMin( "Tess Min Distance", Float ) = 10
 		//_TessMax( "Tess Max Distance", Float ) = 25
 		//_TessEdgeLength ( "Tess Edge length", Range( 2, 50 ) ) = 16
@@ -169,14 +164,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -248,13 +235,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -275,10 +260,11 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
-			sampler2D _Normals;
-			sampler2D _Emmisive;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
+			sampler2D _vulc_VulcanoSurface_BaseColor;
+			sampler2D _vulc_VulcanoSurface_Metallic;
+			sampler2D _vulc_VulcanoSurface_Roughness;
 
 
 			
@@ -289,30 +275,9 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float2 texCoord23 = v.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				o.ase_texcoord7.xy = v.texcoord.xy;
 				
@@ -323,13 +288,13 @@ Shader "FlowMap"
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float3 positionVS = TransformWorldToView( positionWS );
@@ -503,43 +468,18 @@ Shader "FlowMap"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 texCoord23 = IN.ase_texcoord7.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2D( _Flowmap, texCoord23 );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = IN.ase_texcoord7.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2D( _Diffuse, FlowA28 ) , tex2D( _Diffuse, FlowB69 ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
+				float2 uv_vulc_VulcanoSurface_BaseColor = IN.ase_texcoord7.xy * _vulc_VulcanoSurface_BaseColor_ST.xy + _vulc_VulcanoSurface_BaseColor_ST.zw;
 				
-				float3 lerpResult86 = lerp( UnpackNormalScale( tex2D( _Normals, FlowA28 ), 1.0f ) , UnpackNormalScale( tex2D( _Normals, FlowB69 ), 1.0f ) , BlendTime78);
-				float3 Normals87 = lerpResult86;
+				float2 uv_vulc_VulcanoSurface_Metallic = IN.ase_texcoord7.xy * _vulc_VulcanoSurface_Metallic_ST.xy + _vulc_VulcanoSurface_Metallic_ST.zw;
 				
-				float4 lerpResult100 = lerp( ( tex2D( _Emmisive, FlowA28 ) * _EmmisionColor ) , ( tex2D( _Emmisive, FlowB69 ) * _EmmisionColor ) , BlendTime78);
-				float4 Emmision101 = lerpResult100;
+				float2 uv_vulc_VulcanoSurface_Roughness = IN.ase_texcoord7.xy * _vulc_VulcanoSurface_Roughness_ST.xy + _vulc_VulcanoSurface_Roughness_ST.zw;
 				
-				float3 temp_cast_3 = (_Metallic).xxx;
-				
-				float3 Albedo = Diffuse29.rgb;
-				float3 Normal = Normals87;
-				float3 Emission = Emmision101.rgb;
-				float3 Specular = temp_cast_3;
-				float Metallic = 0;
-				float Smoothness = _Smoothness;
+				float3 Albedo = tex2D( _vulc_VulcanoSurface_BaseColor, uv_vulc_VulcanoSurface_BaseColor ).rgb;
+				float3 Normal = float3(0, 0, 1);
+				float3 Emission = 0;
+				float3 Specular = 0.5;
+				float Metallic = tex2D( _vulc_VulcanoSurface_Metallic, uv_vulc_VulcanoSurface_Metallic ).r;
+				float Smoothness = ( 1.0 - tex2D( _vulc_VulcanoSurface_Roughness, uv_vulc_VulcanoSurface_Roughness ) ).r;
 				float Occlusion = 1;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
@@ -712,14 +652,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -760,13 +692,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -787,8 +717,8 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
 
 
 			
@@ -801,44 +731,23 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float2 texCoord23 = v.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.ase_texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.ase_texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.ase_texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
 
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
@@ -1016,14 +925,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1064,13 +965,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1091,8 +990,8 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
 
 
 			
@@ -1103,44 +1002,23 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float2 texCoord23 = v.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.ase_texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.ase_texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.ase_texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
 
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float4 positionCS = TransformWorldToHClip( positionWS );
 
@@ -1303,14 +1181,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1355,13 +1225,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1382,9 +1250,9 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
-			sampler2D _Emmisive;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
+			sampler2D _vulc_VulcanoSurface_BaseColor;
 
 
 			
@@ -1395,30 +1263,9 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float2 texCoord23 = v.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.ase_texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.ase_texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.ase_texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
@@ -1430,14 +1277,14 @@ Shader "FlowMap"
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
 
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
@@ -1558,35 +1405,11 @@ Shader "FlowMap"
 					#endif
 				#endif
 
-				float2 texCoord23 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2D( _Flowmap, texCoord23 );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = IN.ase_texcoord2.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2D( _Diffuse, FlowA28 ) , tex2D( _Diffuse, FlowB69 ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				
-				float4 lerpResult100 = lerp( ( tex2D( _Emmisive, FlowA28 ) * _EmmisionColor ) , ( tex2D( _Emmisive, FlowB69 ) * _EmmisionColor ) , BlendTime78);
-				float4 Emmision101 = lerpResult100;
+				float2 uv_vulc_VulcanoSurface_BaseColor = IN.ase_texcoord2.xy * _vulc_VulcanoSurface_BaseColor_ST.xy + _vulc_VulcanoSurface_BaseColor_ST.zw;
 				
 				
-				float3 Albedo = Diffuse29.rgb;
-				float3 Emission = Emmision101.rgb;
+				float3 Albedo = tex2D( _vulc_VulcanoSurface_BaseColor, uv_vulc_VulcanoSurface_BaseColor ).rgb;
+				float3 Emission = 0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -1622,14 +1445,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1673,13 +1488,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1700,8 +1513,9 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
+			sampler2D _vulc_VulcanoSurface_BaseColor;
 
 
 			
@@ -1712,30 +1526,9 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float2 texCoord23 = v.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.ase_texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.ase_texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.ase_texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
@@ -1747,14 +1540,14 @@ Shader "FlowMap"
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
 
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float4 positionCS = TransformWorldToHClip( positionWS );
@@ -1872,31 +1665,10 @@ Shader "FlowMap"
 					#endif
 				#endif
 
-				float2 texCoord23 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2D( _Flowmap, texCoord23 );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = IN.ase_texcoord2.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2D( _Diffuse, FlowA28 ) , tex2D( _Diffuse, FlowB69 ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
+				float2 uv_vulc_VulcanoSurface_BaseColor = IN.ase_texcoord2.xy * _vulc_VulcanoSurface_BaseColor_ST.xy + _vulc_VulcanoSurface_BaseColor_ST.zw;
 				
 				
-				float3 Albedo = Diffuse29.rgb;
+				float3 Albedo = tex2D( _vulc_VulcanoSurface_BaseColor, uv_vulc_VulcanoSurface_BaseColor ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -1929,14 +1701,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1978,13 +1742,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2005,8 +1767,8 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
 
 
 			
@@ -2017,44 +1779,23 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float2 texCoord23 = v.ase_texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.ase_texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.ase_texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.ase_texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
 
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float3 normalWS = TransformObjectToWorldNormal( v.ase_normal );
 				float4 positionCS = TransformWorldToHClip( positionWS );
@@ -2226,14 +1967,6 @@ Shader "FlowMap"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define TESSELLATION_ON 1
-			#pragma require tessellation tessHW
-			#pragma hull HullFunction
-			#pragma domain DomainFunction
-			#define ASE_FIXED_TESSELLATION
-			#define _SPECULAR_SETUP 1
-			#define _EMISSION
-			#define _NORMALMAP 1
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -2303,13 +2036,11 @@ Shader "FlowMap"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _EmmisionColor;
-			float _Speed;
-			float _Strength;
-			float _Tiling;
-			float _OffsetStrength;
-			float _Metallic;
-			float _Smoothness;
+			float4 _vulc_VulcanoSurface_Height_ST;
+			float4 _vulc_VulcanoSurface_Normal_ST;
+			float4 _vulc_VulcanoSurface_BaseColor_ST;
+			float4 _vulc_VulcanoSurface_Metallic_ST;
+			float4 _vulc_VulcanoSurface_Roughness_ST;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2330,9 +2061,9 @@ Shader "FlowMap"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _Diffuse;
-			sampler2D _Flowmap;
-			sampler2D _Emmisive;
+			sampler2D _vulc_VulcanoSurface_Height;
+			sampler2D _vulc_VulcanoSurface_Normal;
+			sampler2D _vulc_VulcanoSurface_BaseColor;
 
 
 			
@@ -2343,30 +2074,9 @@ Shader "FlowMap"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float2 texCoord23 = v.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2Dlod( _Flowmap, float4( texCoord23, 0, 0.0) );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = v.texcoord.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2Dlod( _Diffuse, float4( FlowA28, 0, 0.0) ) , tex2Dlod( _Diffuse, float4( FlowB69, 0, 0.0) ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
-				float grayscale108 = dot(Diffuse29.rgb, float3(0.299,0.587,0.114));
-				float3 temp_cast_2 = (( ( 1.0 - grayscale108 ) * _OffsetStrength )).xxx;
+				float2 uv_vulc_VulcanoSurface_Height = v.texcoord.xy * _vulc_VulcanoSurface_Height_ST.xy + _vulc_VulcanoSurface_Height_ST.zw;
+				
+				float2 uv_vulc_VulcanoSurface_Normal = v.texcoord.xy * _vulc_VulcanoSurface_Normal_ST.xy + _vulc_VulcanoSurface_Normal_ST.zw;
 				
 				o.ase_texcoord7.xy = v.texcoord.xy;
 				
@@ -2377,13 +2087,13 @@ Shader "FlowMap"
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = temp_cast_2;
+				float3 vertexValue = tex2Dlod( _vulc_VulcanoSurface_Height, float4( uv_vulc_VulcanoSurface_Height, 0, 0.0) ).rgb;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
-				v.ase_normal = v.ase_normal;
+				v.ase_normal = tex2Dlod( _vulc_VulcanoSurface_Normal, float4( uv_vulc_VulcanoSurface_Normal, 0, 0.0) ).rgb;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float3 positionVS = TransformWorldToView( positionWS );
@@ -2556,35 +2266,11 @@ Shader "FlowMap"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 texCoord23 = IN.ase_texcoord7.xy * float2( 1,1 ) + float2( 0,0 );
-				float4 tex2DNode1 = tex2D( _Flowmap, texCoord23 );
-				float2 appendResult47 = (float2(tex2DNode1.r , tex2DNode1.g));
-				float2 blendOpSrc24 = texCoord23;
-				float2 blendOpDest24 = appendResult47;
-				float2 temp_output_24_0 = ( saturate( (( blendOpDest24 > 0.5 ) ? ( 1.0 - 2.0 * ( 1.0 - blendOpDest24 ) * ( 1.0 - blendOpSrc24 ) ) : ( 2.0 * blendOpDest24 * blendOpSrc24 ) ) ));
-				float temp_output_18_0 = ( _TimeParameters.x * _Speed );
-				float temp_output_1_0_g5 = temp_output_18_0;
-				float temp_output_21_0 = (0.0 + (( ( temp_output_1_0_g5 - floor( ( temp_output_1_0_g5 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
-				float TimeA26 = ( -temp_output_21_0 * _Strength );
-				float2 lerpResult25 = lerp( texCoord23 , temp_output_24_0 , TimeA26);
-				float2 temp_cast_0 = (_Tiling).xx;
-				float2 texCoord56 = IN.ase_texcoord7.xy * temp_cast_0 + float2( 0,0 );
-				float2 DiffuseTiling57 = texCoord56;
-				float2 FlowA28 = ( lerpResult25 + DiffuseTiling57 );
-				float temp_output_1_0_g4 = (temp_output_18_0*1.0 + 0.5);
-				float TimeB65 = ( -(0.0 + (( ( temp_output_1_0_g4 - floor( ( temp_output_1_0_g4 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0)) * _Strength );
-				float2 lerpResult66 = lerp( texCoord23 , temp_output_24_0 , TimeB65);
-				float2 FlowB69 = ( DiffuseTiling57 + lerpResult66 );
-				float BlendTime78 = saturate( abs( ( 1.0 - ( temp_output_21_0 / 0.5 ) ) ) );
-				float4 lerpResult72 = lerp( tex2D( _Diffuse, FlowA28 ) , tex2D( _Diffuse, FlowB69 ) , BlendTime78);
-				float4 Diffuse29 = lerpResult72;
+				float2 uv_vulc_VulcanoSurface_BaseColor = IN.ase_texcoord7.xy * _vulc_VulcanoSurface_BaseColor_ST.xy + _vulc_VulcanoSurface_BaseColor_ST.zw;
 				
-				float4 lerpResult100 = lerp( ( tex2D( _Emmisive, FlowA28 ) * _EmmisionColor ) , ( tex2D( _Emmisive, FlowB69 ) * _EmmisionColor ) , BlendTime78);
-				float4 Emmision101 = lerpResult100;
-				
-				float3 Albedo = Diffuse29.rgb;
+				float3 Albedo = tex2D( _vulc_VulcanoSurface_BaseColor, uv_vulc_VulcanoSurface_BaseColor ).rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = Emmision101.rgb;
+				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
@@ -2744,163 +2430,26 @@ Shader "FlowMap"
 }
 /*ASEBEGIN
 Version=18900
--1273.333;18;1280;633;439.951;164.5988;1.234241;True;True
-Node;AmplifyShaderEditor.RangedFloatNode;19;-3439.027,360.0095;Inherit;False;Property;_Speed;Speed;1;0;Create;True;0;0;0;False;0;False;1;0.15;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleTimeNode;17;-3398.74,212.2872;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;18;-3165.965,271.9729;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.ScaleAndOffsetNode;61;-2943.748,529.0129;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;1;False;2;FLOAT;0.5;False;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;62;-2741.48,535.6848;Inherit;False;Sawtooth Wave;-1;;4;289adb816c3ac6d489f255fc3caf5016;0;1;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;20;-2809.549,245.3914;Inherit;False;Sawtooth Wave;-1;;5;289adb816c3ac6d489f255fc3caf5016;0;1;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TFHCRemapNode;21;-2597.208,295.8289;Inherit;True;5;0;FLOAT;0;False;1;FLOAT;-1;False;2;FLOAT;1;False;3;FLOAT;0;False;4;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TFHCRemapNode;63;-2557.668,586.1223;Inherit;True;5;0;FLOAT;0;False;1;FLOAT;-1;False;2;FLOAT;1;False;3;FLOAT;0;False;4;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.NegateNode;22;-2290.581,248.5821;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TextureCoordinatesNode;23;-4704.554,-927.5801;Inherit;True;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;93;-2072.698,416.2121;Inherit;False;Property;_Strength;Strength;8;0;Create;True;0;0;0;False;0;False;1;1.36;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.NegateNode;64;-2222.512,538.8755;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;92;-1941.399,557.912;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;48;-3467.392,-1459.861;Inherit;False;Property;_Tiling;Tiling;5;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;1;-4316.889,-618.9684;Inherit;True;Property;_Flowmap;Flowmap;0;0;Create;True;0;0;0;False;0;False;-1;50ead7d0ed658df40bd5f1c580238c09;50ead7d0ed658df40bd5f1c580238c09;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;91;-1943.998,249.8122;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;65;-1671.051,520.9436;Inherit;True;TimeB;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TextureCoordinatesNode;56;-3207.99,-1458.495;Inherit;False;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.DynamicAppendNode;47;-3808.178,-446.3295;Inherit;True;FLOAT2;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;26;-1624.721,238.45;Inherit;True;TimeA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;27;-3382.948,-271.4796;Inherit;False;26;TimeA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleDivideOpNode;73;-2285.441,800.8071;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.5;False;1;FLOAT;0
-Node;AmplifyShaderEditor.BlendOpsNode;24;-3464.038,-633.5062;Inherit;True;Overlay;True;3;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;2;FLOAT;1;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;67;-3406.126,-120.1401;Inherit;False;65;TimeB;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;57;-2802.671,-1443.133;Inherit;False;DiffuseTiling;-1;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;60;-3007.33,-378.2112;Inherit;False;57;DiffuseTiling;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.LerpOp;66;-3116.256,-157.6945;Inherit;False;3;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.LerpOp;25;-3144.265,-673.2148;Inherit;True;3;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.OneMinusNode;75;-2010.961,813.982;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.AbsOpNode;76;-1782.596,853.5072;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;68;-2685.02,-268.0601;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;58;-2702.87,-548.7821;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.SaturateNode;77;-1573.992,849.1154;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;69;-2307.297,-283.9089;Inherit;False;FlowB;-1;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;28;-2348.342,-579.2913;Inherit;False;FlowA;-1;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.TexturePropertyNode;30;-855.012,-1269.232;Inherit;True;Property;_Diffuse;Diffuse;2;0;Create;True;0;0;0;False;0;False;4cef28492924afd4a80fedcf176fdb75;4cef28492924afd4a80fedcf176fdb75;False;white;Auto;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RegisterLocalVarNode;78;-1249.011,853.5072;Inherit;False;BlendTime;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;71;-915.9269,-788.2556;Inherit;False;69;FlowB;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;31;-927.2877,-1031.259;Inherit;True;28;FlowA;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;79;-235.2787,-698.8555;Inherit;False;78;BlendTime;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;7;-395.1614,-1175.609;Inherit;True;Property;_def;def;1;0;Create;True;0;0;0;False;0;False;-1;None;4cef28492924afd4a80fedcf176fdb75;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;70;-344.986,-919.172;Inherit;True;Property;_TextureSample0;Texture Sample 0;5;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.LerpOp;72;149.5868,-1020.996;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TexturePropertyNode;96;-952.6057,-2013.951;Inherit;True;Property;_Emmisive;Emmisive;3;0;Create;True;0;0;0;False;0;False;4cef28492924afd4a80fedcf176fdb75;4cef28492924afd4a80fedcf176fdb75;False;white;Auto;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.GetLocalVarNode;94;-1024.881,-1775.978;Inherit;True;28;FlowA;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;95;-1013.52,-1532.975;Inherit;False;69;FlowB;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;29;472.038,-1139.861;Inherit;False;Diffuse;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SamplerNode;99;-442.5795,-1663.891;Inherit;True;Property;_TextureSample2;Texture Sample 2;5;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;104;-324.9911,-1828.906;Inherit;False;Property;_EmmisionColor;Emmision Color;9;1;[HDR];Create;True;0;0;0;False;0;False;0,0,0,0;4,4,4,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;98;-414.8232,-2160.441;Inherit;True;Property;_TextureSample3;Texture Sample 3;1;0;Create;True;0;0;0;False;0;False;-1;None;4cef28492924afd4a80fedcf176fdb75;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;102;73.09167,-1904.732;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;103;20.43524,-1761.506;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;32;-848.0089,-96.68978;Inherit;True;29;Diffuse;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;97;-332.8723,-1443.575;Inherit;False;78;BlendTime;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TFHCGrayscale;108;-612.0658,79.47932;Inherit;True;1;1;0;FLOAT3;0,0,0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.LerpOp;100;445.8636,-1795.203;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.OneMinusNode;109;-275.0549,22.10339;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;111;-64.63655,308.0508;Inherit;False;Property;_OffsetStrength;OffsetStrength;10;0;Create;True;0;0;0;False;0;False;1;0.51;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;101;768.3148,-1914.068;Inherit;False;Emmision;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;87;484.6302,658.3987;Inherit;False;Normals;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;82;-914.696,767.0008;Inherit;True;28;FlowA;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.GetLocalVarNode;88;262.553,6.22905;Inherit;False;87;Normals;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;105;296.4793,-126.451;Inherit;False;101;Emmision;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;81;-903.3353,1010.004;Inherit;False;69;FlowB;1;0;OBJECT;;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.SamplerNode;84;-332.3937,879.0878;Inherit;True;Property;_TextureSample1;Texture Sample 1;5;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;True;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;110;236.9209,279.6254;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;85;-41.15059,1059.297;Inherit;False;78;BlendTime;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;89;270.553,160.229;Inherit;False;Property;_Smoothness;Smoothness;6;0;Create;True;0;0;0;False;0;False;0;0.5;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;80;-842.4205,529.0276;Inherit;True;Property;_Normals;Normals;4;1;[Normal];Create;True;0;0;0;False;0;False;b1b9c6c31d1e9144882991ef6f5f6800;b1b9c6c31d1e9144882991ef6f5f6800;True;white;Auto;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.LerpOp;86;162.179,777.2639;Inherit;False;3;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RangedFloatNode;90;256.553,79.22905;Inherit;False;Property;_Metallic;Metallic;7;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;83;-382.5692,622.6506;Inherit;True;Property;_TextureSample4;Texture Sample 4;1;0;Create;True;0;0;0;False;0;False;-1;None;4cef28492924afd4a80fedcf176fdb75;True;0;False;white;Auto;True;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;41;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalGBuffer;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;37;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;40;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;36;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;35;531.3702,-95.4514;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;FlowMap;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;0;Surface;0;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;0;  Transmission Shadow;0.5,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;1;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;39;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;38;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;34;311.3702,-106.4514;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-WireConnection;18;0;17;0
-WireConnection;18;1;19;0
-WireConnection;61;0;18;0
-WireConnection;62;1;61;0
-WireConnection;20;1;18;0
-WireConnection;21;0;20;0
-WireConnection;63;0;62;0
-WireConnection;22;0;21;0
-WireConnection;64;0;63;0
-WireConnection;92;0;64;0
-WireConnection;92;1;93;0
-WireConnection;1;1;23;0
-WireConnection;91;0;22;0
-WireConnection;91;1;93;0
-WireConnection;65;0;92;0
-WireConnection;56;0;48;0
-WireConnection;47;0;1;1
-WireConnection;47;1;1;2
-WireConnection;26;0;91;0
-WireConnection;73;0;21;0
-WireConnection;24;0;23;0
-WireConnection;24;1;47;0
-WireConnection;57;0;56;0
-WireConnection;66;0;23;0
-WireConnection;66;1;24;0
-WireConnection;66;2;67;0
-WireConnection;25;0;23;0
-WireConnection;25;1;24;0
-WireConnection;25;2;27;0
-WireConnection;75;0;73;0
-WireConnection;76;0;75;0
-WireConnection;68;0;60;0
-WireConnection;68;1;66;0
-WireConnection;58;0;25;0
-WireConnection;58;1;60;0
-WireConnection;77;0;76;0
-WireConnection;69;0;68;0
-WireConnection;28;0;58;0
-WireConnection;78;0;77;0
-WireConnection;7;0;30;0
-WireConnection;7;1;31;0
-WireConnection;70;0;30;0
-WireConnection;70;1;71;0
-WireConnection;72;0;7;0
-WireConnection;72;1;70;0
-WireConnection;72;2;79;0
-WireConnection;29;0;72;0
-WireConnection;99;0;96;0
-WireConnection;99;1;95;0
-WireConnection;98;0;96;0
-WireConnection;98;1;94;0
-WireConnection;102;0;98;0
-WireConnection;102;1;104;0
-WireConnection;103;0;99;0
-WireConnection;103;1;104;0
-WireConnection;108;0;32;0
-WireConnection;100;0;102;0
-WireConnection;100;1;103;0
-WireConnection;100;2;97;0
-WireConnection;109;0;108;0
-WireConnection;101;0;100;0
-WireConnection;87;0;86;0
-WireConnection;84;0;80;0
-WireConnection;84;1;81;0
-WireConnection;110;0;109;0
-WireConnection;110;1;111;0
-WireConnection;86;0;83;0
-WireConnection;86;1;84;0
-WireConnection;86;2;85;0
-WireConnection;83;0;80;0
-WireConnection;83;1;82;0
-WireConnection;35;0;32;0
-WireConnection;35;1;88;0
-WireConnection;35;2;105;0
-WireConnection;35;9;90;0
-WireConnection;35;4;89;0
-WireConnection;35;8;110;0
+232;474.6667;1693.333;923;1059.403;487.2503;1;True;True
+Node;AmplifyShaderEditor.SamplerNode;10;-337.4026,34.74966;Inherit;True;Property;_vulc_VulcanoSurface_Metallic;vulc_VulcanoSurface_Metallic;2;0;Create;True;0;0;0;False;0;False;-1;9793d17e9e0554a47b3e13980d0ac195;9793d17e9e0554a47b3e13980d0ac195;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;9;-532.4026,-107.2503;Inherit;True;Property;_vulc_VulcanoSurface_Height;vulc_VulcanoSurface_Height;1;0;Create;True;0;0;0;False;0;False;-1;ed829ee999fb35d40af802c5d284b624;ed829ee999fb35d40af802c5d284b624;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;11;-371.4026,341.7497;Inherit;True;Property;_vulc_VulcanoSurface_Normal;vulc_VulcanoSurface_Normal;3;0;Create;True;0;0;0;False;0;False;-1;41a9dd1b5d0d1ac46b3fabd0588aea83;41a9dd1b5d0d1ac46b3fabd0588aea83;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;12;-418.4026,-272.2503;Inherit;True;Property;_vulc_VulcanoSurface_Roughness;vulc_VulcanoSurface_Roughness;4;0;Create;True;0;0;0;False;0;False;-1;b54dbc275daaedc4b85b5d00764a8f0e;b54dbc275daaedc4b85b5d00764a8f0e;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.OneMinusNode;13;-58.40259,-171.2503;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SamplerNode;8;-679.4026,99.74966;Inherit;True;Property;_vulc_VulcanoSurface_BaseColor;vulc_VulcanoSurface_BaseColor;0;0;Create;True;0;0;0;False;0;False;-1;87c31a85b8faeac46bcff2c3ca65f78e;87c31a85b8faeac46bcff2c3ca65f78e;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;5;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;6;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;7;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalGBuffer;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;0,1;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;Vulcano;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;1;Surface;0;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;0;  Transmission Shadow;0.5,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
+WireConnection;13;0;12;0
+WireConnection;1;0;8;0
+WireConnection;1;3;10;0
+WireConnection;1;4;13;0
+WireConnection;1;8;9;0
+WireConnection;1;10;11;0
 ASEEND*/
-//CHKSM=6D34404603495EADA2EBC2390A1B3C2D4D44C40D
+//CHKSM=5C77A1C2C9CC7C00303A3E81B8CF41510560B6E1

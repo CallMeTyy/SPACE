@@ -22,10 +22,7 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private float _blinkSpeed;
     [SerializeField] private Material[] _mat;
     [SerializeField] private Animator[] anim;
-    private int a;
-    float index2;
-    float amplitudeX = 10.0f;
-    float omegaX = 1.0f;
+    private bool isPlayingAlarm;
     private OscMaster master;
 
     public void GoToScene(string sceneName)
@@ -42,7 +39,7 @@ public class SceneMaster : MonoBehaviour
 
         if (isInHub)
         {
-            timer = Random.Range(8, 12);
+            timer = Random.Range(12, 16);
         }
         for (int i = 0; i < _mat.Length; i++)
         {
@@ -61,7 +58,7 @@ public class SceneMaster : MonoBehaviour
             {
 
                 timer -= Time.deltaTime;
-                if (timer < 3.14f)
+                if (timer < 6f)
                 {
                     if (!audioData.isPlaying) audioData.Play();
 
@@ -71,10 +68,13 @@ public class SceneMaster : MonoBehaviour
                         anim[i].SetBool("isBreaking", true);
                         if (_mat[i].GetFloat("_isStuttering") == 0)
                             _mat[i].SetFloat("_isStuttering", 1);
-            
+                        
                     }
+                    if (!isPlayingAlarm)
+                        AudioManager.instance.Play("Alarm"); isPlayingAlarm = true;
 
                 }
+                else { isPlayingAlarm = false; }
             }
             else
             {
@@ -94,7 +94,7 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Win");
                         break;
                     default:
-                        timer = Random.Range(8, 12);
+                        timer = Random.Range(12, 16);
                         break;
                 }
                 master.GetSceneIndex++;
