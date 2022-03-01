@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Flowmap:
-        m_Texture: {fileID: 2800000, guid: 6958e943ede809240a23418424d9e853, type: 3}
+        m_Texture: {fileID: 2800000, guid: 50ead7d0ed658df40bd5f1c580238c09, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normals:
@@ -83,13 +83,13 @@ Material:
     - _Float0: 0.78
     - _Float1: 0.26
     - _Metallic: 0.84
-    - _OffsetStrength: 0.25
+    - _OffsetStrength: 0
     - _Size: 1
     - _Smoothness: 4.39
     - _Speed: 0.21
     - _Strength: 1.36
     - _TessValue: 16
-    - _Tiling: 1
+    - _Tiling: 5.32
     - _TimeOffset: 0.5
     - __dirty: 0
     m_Colors:
@@ -97,6 +97,6 @@ Material:
     - Color_A2AAE5B5: {r: 0.11372546, g: 0.62745106, b: 0.8352941, a: 0}
     - Vector2_C848BFFB: {r: 0.25, g: 0.25, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmmisionColor: {r: 6.498019, g: 2.9304793, b: 2.9304793, a: 0}
+    - _EmmisionColor: {r: 11.181761, g: 5.0932627, b: 5.0932627, a: 0}
     - _LavaTiling: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []

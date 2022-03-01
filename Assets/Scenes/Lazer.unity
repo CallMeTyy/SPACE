@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.017726002, g: 0.005899355, b: 0.031277, a: 1}
+  m_IndirectSpecularColor: {r: 0.017703407, g: 0.0058767647, b: 0.031254414, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5619,6 +5619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _firePlayers: []
   _valvePlayers: []
+  _windowPlayers: []
   _lazerMaster: {fileID: 2102488158}
   scores: []
 --- !u!4 &446747181
@@ -51403,6 +51404,11 @@ MonoBehaviour:
   _t24: {fileID: 283750975}
   T1Score: 0
   T2Score: 0
+  _vfx:
+  - {fileID: 1310489767}
+  - {fileID: 812872915}
+  - {fileID: 596788397}
+  - {fileID: 1557434282}
 --- !u!4 &2102488159
 Transform:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using extOSC;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class LazerMaster : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class LazerMaster : MonoBehaviour
     private float speed = 0.0025f;
     private float timeCheck;
     private int CPUInput;
+
+    [SerializeField] private VisualEffect[] _vfx;
 
     // Start is called before the first frame update
     void Start()
@@ -86,9 +89,9 @@ public class LazerMaster : MonoBehaviour
     {
         OSCMessage msg = new OSCMessage("CPU");
         msg.AddValue(OSCValue.Int(ID));
-        msg.AddValue(OSCValue.Float(4));
-        msg.AddValue(OSCValue.Float(4));
-        msg.AddValue(OSCValue.Float(4));
+        msg.AddValue(OSCValue.Float(Random.Range(1,8)));
+        msg.AddValue(OSCValue.Float(Random.Range(1, 8)));
+        msg.AddValue(OSCValue.Float(Random.Range(1, 8)));
         accelInput(msg);
     }
 
@@ -120,5 +123,34 @@ public class LazerMaster : MonoBehaviour
                 T1Score -= speed;
             }
         }
+        if (message.Values[0].IntValue == 1)
+        {
+            if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue).magnitude > 4)
+                _vfx[0].SetFloat("SpawnRate", 0);
+            else { _vfx[0].SetFloat("SpawnRate", -1); }
+        }
+
+        if (message.Values[0].IntValue == 2)
+        {
+            if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue).magnitude > 4)
+                _vfx[1].SetFloat("SpawnRate", 0);
+            else { _vfx[1].SetFloat("SpawnRate", -1); }
+        }
+
+        if (message.Values[0].IntValue == 3)
+        {
+            if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue).magnitude > 4)
+                _vfx[2].SetFloat("SpawnRate", 0);
+            else { _vfx[2].SetFloat("SpawnRate", -1); }
+        }
+
+        if (message.Values[0].IntValue == 4)
+        {
+            if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue).magnitude > 4)
+                _vfx[3].SetFloat("SpawnRate", 0);
+            else { _vfx[3].SetFloat("SpawnRate", -1); }
+        }
+
+
     }
 }

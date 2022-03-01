@@ -27,10 +27,6 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Sprite[] icons;
     [SerializeField] private Image inputIcon;
     [SerializeField] private Text _gameText;
-    private int a;
-    float index2;
-    float amplitudeX = 10.0f;
-    float omegaX = 1.0f;
     private OscMaster master;
 
     public void GoToScene(string sceneName)
@@ -109,14 +105,13 @@ public class SceneMaster : MonoBehaviour
                         _clock.text = "" + Mathf.Clamp((int) timer + 1, 1, 3);
                     }
                 }
-                else { isPlayingAlarm = false; }
             }
             else
             {
                 switch (master.GetSceneIndex)
                 {
                     case 0:
-                        GoToScene("Fire");
+                        GoToScene("Lazer");
                         break;
                     case 1:
                         GoToScene("MiniValve");

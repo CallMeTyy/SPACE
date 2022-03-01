@@ -15,6 +15,7 @@ public class FireMaster : MonoBehaviour
     [SerializeField] private Material _mat;
     [SerializeField] private VisualEffect[] _vfx;
     [SerializeField] private Emergency[] _eLights;
+    [SerializeField] private VisualEffect _fireflies;
     private float fireValue = 1.0f;
     private ScoreMaster _master;
     private float CPUInput = 0f;
@@ -94,6 +95,7 @@ public class FireMaster : MonoBehaviour
         _mat.SetFloat("_FlameAmount", fireValue - 1);
         for (int i = 0; i < _vfx.Length; i++)
         _vfx[i].SetFloat("SpawnRate", fireValue - 1);
+        _fireflies.SetFloat("SpawnRate", fireValue - 1);
         if (fireValue <= 0)
         {
             foreach (Emergency _l in _eLights)
