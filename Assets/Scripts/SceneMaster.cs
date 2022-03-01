@@ -28,6 +28,7 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Image inputIcon;
     [SerializeField] private Text _gameText;
     private OscMaster master;
+    bool isPlayingAlarm;
 
     public void GoToScene(string sceneName)
     {
@@ -62,7 +63,7 @@ public class SceneMaster : MonoBehaviour
             {
 
                 timer -= Time.deltaTime;
-                if (timer < 6.14f && index != 3)
+                if (timer < 6.14f && index != 5)
                 {
                     if (!audioData.isPlaying) audioData.Play();
 
@@ -73,6 +74,7 @@ public class SceneMaster : MonoBehaviour
                         if (_mat[i].GetFloat("_isStuttering") == 0)
                             _mat[i].SetFloat("_isStuttering", 1);
                     }
+                    if (!isPlayingAlarm) AudioManager.instance.Play("Alarm"); isPlayingAlarm = true;
                     
 
                     if (timer < 3f)
@@ -92,11 +94,15 @@ public class SceneMaster : MonoBehaviour
                                     break;
                                 case 2:
                                     inputIcon.sprite = icons[2];
-                                    _gameText.text = "Shake to power up the lazer!";
+                                    _gameText.text = "Shake to power up the laser!";
                                     break;
                                 case 3:
                                     inputIcon.sprite = icons[3];
                                     _gameText.text = "Clean the window with touch input!";
+                                    break;
+                                case 4:
+                                    inputIcon.sprite = icons[1];
+                                    _gameText.text = "Use phone rotation to avoid falling!";
                                     break;
                                 default:
                                     break;
@@ -105,13 +111,15 @@ public class SceneMaster : MonoBehaviour
                         _clock.text = "" + Mathf.Clamp((int) timer + 1, 1, 3);
                     }
                 }
+                
             }
             else
             {
+                AudioManager.instance.StopPlaying("Alarm");
                 switch (master.GetSceneIndex)
                 {
                     case 0:
-                        GoToScene("Lazer");
+                        GoToScene("Window");
                         break;
                     case 1:
                         GoToScene("MiniValve");
@@ -123,6 +131,9 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Window");
                         break;
                     case 4:
+                        GoToScene("Volcano");
+                        break;
+                    case 5:
                         GoToScene("Win");
                         break;
                     default:

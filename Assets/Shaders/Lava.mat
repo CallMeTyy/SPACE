@@ -82,14 +82,23 @@ Material:
     - _EmissionPower: 0.78
     - _Float0: 0.78
     - _Float1: 0.26
+<<<<<<< Updated upstream
     - _Metallic: 0.84
     - _OffsetStrength: 0
+=======
+    - _Metallic: 1
+    - _OffsetStrength: 0.1
+>>>>>>> Stashed changes
     - _Size: 1
     - _Smoothness: 4.39
     - _Speed: 0.21
-    - _Strength: 1.36
+    - _Strength: 0.25
     - _TessValue: 16
+<<<<<<< Updated upstream
     - _Tiling: 5.32
+=======
+    - _Tiling: 0.99
+>>>>>>> Stashed changes
     - _TimeOffset: 0.5
     - __dirty: 0
     m_Colors:
@@ -97,6 +106,10 @@ Material:
     - Color_A2AAE5B5: {r: 0.11372546, g: 0.62745106, b: 0.8352941, a: 0}
     - Vector2_C848BFFB: {r: 0.25, g: 0.25, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+<<<<<<< Updated upstream
     - _EmmisionColor: {r: 11.181761, g: 5.0932627, b: 5.0932627, a: 0}
+=======
+    - _EmmisionColor: {r: 38.937145, g: 17.735767, b: 17.735767, a: 0}
+>>>>>>> Stashed changes
     - _LavaTiling: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []

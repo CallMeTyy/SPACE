@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Master
   - Score
+  - Platform
+  - Lava
   layers:
   - Default
   - TransparentFX

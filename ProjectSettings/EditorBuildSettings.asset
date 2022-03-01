@@ -32,4 +32,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Win.unity
     guid: b950034f2d201b24c9ec3d1b45ac3df3
+  - enabled: 1
+    path: Assets/Scenes/Window.unity
+    guid: e4dfb17169781734c9f28b24f6eae648
+  - enabled: 1
+    path: Assets/Scenes/Volcano.unity
+    guid: 67be29341b663834eaa1cd3f3765e6b0
   m_configObjects: {}

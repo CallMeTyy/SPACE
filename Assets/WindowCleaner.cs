@@ -17,6 +17,7 @@ public class WindowCleaner : MonoBehaviour
     private Vector2 currentPos;
     public bool win;
     [SerializeField] Light _light;
+    [SerializeField] private Transform _sponge;
     private ScoreMaster _master;
     private float CPUInput = 0f;
     private float timeCheck;
@@ -83,6 +84,8 @@ public class WindowCleaner : MonoBehaviour
     private void Update()
     {
         CPU();
+        if (_sponge != null) _sponge.localPosition = new Vector3(Map(currentPos.x + 0.025f, 0, 1, 0.56f, 0.87f),
+            Map(currentPos.y, 0, 1, -0.1189f,0.091f ), -6.8342f);
     }
     public int GetID()
     {
