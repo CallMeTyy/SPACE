@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using extOSC;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class LavaPlayerController : MonoBehaviour
@@ -22,8 +24,11 @@ public class LavaPlayerController : MonoBehaviour
     private Vector3 targetPos;
 
     private SpriteRenderer _rend;
+    [SerializeField] private Text okText;
+    [SerializeField] private GameObject canvas;
 
     public bool ready = false;
+    private bool lesgo;
 
     private float timeBeforeWalk;
     // Start is called before the first frame update
@@ -33,11 +38,15 @@ public class LavaPlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
         _rend = GetComponent<SpriteRenderer>();
-        
+        _rend.enabled = false;
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/gyro", MessageRecieved);
-
+        canvas.SetActive(true);
         targetPos = transform.position;
 
         for (int i = 0; i < 5; i++)
@@ -53,7 +62,11 @@ public class LavaPlayerController : MonoBehaviour
     {
         if (msg.Values[0].IntValue == ID)
         {
-            ready = true;
+            if (!ready)
+            {
+                okText.text = "OK";
+                ready = true;
+            }
             horizontalValue = msg.Values[2].FloatValue;
             verticalValue = msg.Values[1].FloatValue;
         }
@@ -66,7 +79,21 @@ public class LavaPlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_master != null) if (!_master.isReady()) return;
+        if (_master != null)
+        {
+            if (!_master.isReady()) return;
+            else if (!lesgo)
+            {
+                foreach (Transform child in transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+
+                canvas.SetActive(false);
+                _rend.enabled = true;
+                lesgo = true;
+            }
+        }
         _rigidbody.velocity =
             new Vector3(_rigidbody.velocity.x * 0.9f, _rigidbody.velocity.y, _rigidbody.velocity.z * 0.9f);
         if (new Vector2(_rigidbody.velocity.x, _rigidbody.velocity.z).magnitude > 0.1f) _animator.SetBool("walking", true);
@@ -108,8 +135,12 @@ public class LavaPlayerController : MonoBehaviour
             {
                 if (ID > _master.GetPlayerCount())
                 {
-                    ready = true;
-                    isBot = true;
+                    if (!ready)
+                    {
+                        okText.text = "OK";
+                        ready = true;
+                        isBot = true;
+                    }
                     timeCheck += Time.deltaTime;
                     if (timeCheck > timeBeforeWalk)
                     {
@@ -122,10 +153,14 @@ public class LavaPlayerController : MonoBehaviour
         }
         else
         {
-            ready = true;
             if (ID > 1)
             {
-                isBot = true;
+                if (!ready)
+                {
+                    okText.text = "OK";
+                    ready = true;
+                    isBot = true;
+                }
                 timeCheck += Time.deltaTime;
                 if (timeCheck > timeBeforeWalk)
                 {

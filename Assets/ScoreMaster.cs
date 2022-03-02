@@ -11,6 +11,7 @@ public class ScoreMaster : MonoBehaviour
     [SerializeField] private Valve[] _valvePlayers;
     [SerializeField] private WindowCleaner[] _windowPlayers;
     [SerializeField] private GameObject[] _lavas;
+    [SerializeField] private WaterPlayer[] _water;
     [SerializeField] private LazerMaster _lazerMaster;
     [SerializeField] List<Vector2> scores;
 
@@ -26,7 +27,8 @@ public class ScoreMaster : MonoBehaviour
 
     public int GetPlayerCount()
     {
-        return _master.GetPlayerCount();
+        if (_master != null) return _master.GetPlayerCount();
+        else return 0;
     }
 
     public bool isReady()
@@ -116,6 +118,22 @@ public class ScoreMaster : MonoBehaviour
                         scores[0] = new Vector2(_lavas[i].GetComponent<LavaPlayerController>().GetID(), 0);
                 }
                 _master.AddScore((int) scores[0].x, (int) scores[3].x, (int) scores[2].x, (int) scores[1].x);
+                SceneManager.LoadScene("SpaceHub");
+            }
+        }
+        else if (scene == "WaterPlanet")
+        {
+            int pdone = 0;
+            for (int i = 0; i < _water.Length; i++)
+            {
+                if (_water[i].dead && scores[i].x == 0) scores[i] = new Vector2(_water[i].GetID(),Time.time);
+                if (scores[i].x != 0) pdone++;
+            }
+
+            if (_master != null && pdone >= 3)
+            {
+                scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
+                _master.AddScore((int) scores[3].x, (int) scores[0].x, (int) scores[1].x, (int) scores[2].x);
                 SceneManager.LoadScene("SpaceHub");
             }
         }

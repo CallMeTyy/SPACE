@@ -23,7 +23,7 @@ public class WaterPlayer : MonoBehaviour
     public bool ready = false;
     private bool grounded;
     private bool cpuGrounded = false;
-    private bool dead;
+    public bool dead;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float gravity = 9.81f;
     [SerializeField] private float pushBack = 5f;
