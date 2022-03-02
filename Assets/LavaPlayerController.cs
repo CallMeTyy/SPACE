@@ -124,7 +124,11 @@ public class LavaPlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Lava")) gameObject.SetActive(false);
+        if (other.gameObject.CompareTag("Lava"))
+        {
+            GetComponent<AudioSource>().Play();
+            gameObject.SetActive(false); 
+        }
     }
 
     void CPU()

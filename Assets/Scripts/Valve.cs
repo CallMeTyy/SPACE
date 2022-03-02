@@ -34,6 +34,10 @@ public class Valve : MonoBehaviour
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/valve", RotateValve);
 
+        AudioSource audioSource = GetComponents<AudioSource>()[1];
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.Play();
+
         for (int i = 0; i < 5; i++)
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
@@ -104,20 +108,22 @@ public class Valve : MonoBehaviour
     void UpdateValve()
     {
         angle = 0.7f * angle + 0.3f * targetAngle;
-        if (angle % 360 < 2 && angle >= 360)
+        if (angle % 360 < 2 && angle >= 180)
         {
-            AudioSource audioSource = GetComponent<AudioSource>();
-            audioSource.pitch = Random.Range(0.25f, 0.5f);
+            AudioSource audioSource = GetComponents<AudioSource>()[0];
+            audioSource.pitch = Random.Range(0.7f, 0.9f);
             audioSource.Play();
         }
 
         _vfx.SetFloat("SpawnRate", angle);
         if (angle < 1800)
         {
+           
             _valve.localRotation = quaternion.Euler(-angle / 45,0,0);
         }
         else
         {
+            GetComponents<AudioSource>()[1].Stop();
             _light.color = Color.green;
         }
         

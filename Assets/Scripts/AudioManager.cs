@@ -32,6 +32,7 @@ public class AudioManager : MonoBehaviour
             
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            s.source.panStereo = s.panning;
             s.source.outputAudioMixerGroup = s.outputAudioMixerGroup;
         }
         SceneManager.activeSceneChanged += SceneManagerOnactiveSceneChanged;
@@ -43,6 +44,7 @@ public class AudioManager : MonoBehaviour
             case "Hub":
                 stopSound();
                 Play("Lobby");
+                Play("Engine");
                 break;
             case "SpaceHub":
                 stopSound();
@@ -69,6 +71,7 @@ public class AudioManager : MonoBehaviour
             case "Volcano":
                 stopSound();
                 Play("LavaTheme");
+                Play("Lava");
                 break;
             case "WaterPlanet":
                 stopSound();

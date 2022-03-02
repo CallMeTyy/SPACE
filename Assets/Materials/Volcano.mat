@@ -59,7 +59,7 @@ Material:
     - _TransmissionShadow: 0.5
     - _VetexOffset: 0
     m_Colors:
-    - _Color: {r: 0.13269842, g: 0.5943396, b: 0.50260746, a: 0}
+    - _Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tiling: {r: 30, g: 30, b: 0, a: 0}
   m_BuildTextureStacks: []
