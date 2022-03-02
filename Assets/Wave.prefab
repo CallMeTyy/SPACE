@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1953288830623931162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 26755858642036828}
+  - component: {fileID: 504275433366861845}
+  m_Layer: 0
+  m_Name: CPU
+  m_TagString: CPU
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &26755858642036828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953288830623931162}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.181415, y: 0, z: -25}
+  m_LocalScale: {x: 40, y: 2.5, z: 4}
+  m_Children: []
+  m_Father: {fileID: 5304311903496775999}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &504275433366861845
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953288830623931162}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.0180693, y: 1, z: 2.2381086}
+  m_Center: {x: -0.10453539, y: 0, z: -0.017331362}
 --- !u!65 &5304311903047924722
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8,7 +52,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4998391143082387888}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.0180693, y: 1, z: 2.2381086}
@@ -60,6 +104,7 @@ Transform:
   m_LocalPosition: {x: -5.04138, y: 3.8, z: 159.82}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 26755858642036828}
   - {fileID: 5626696808363340554}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -76,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40abeb917a3a8e4dae6fa589e6e1637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveSpeed: 0.1
+  waveSpeed: 0
 --- !u!1001 &5304311904941855969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -86,7 +131,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 53781fbfda6904a4c90381059518eb5a, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 53781fbfda6904a4c90381059518eb5a, type: 3}
       propertyPath: m_LocalScale.x
@@ -143,6 +188,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 53781fbfda6904a4c90381059518eb5a, type: 3}
       propertyPath: m_Name
       value: wave
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 53781fbfda6904a4c90381059518eb5a, type: 3}
+      propertyPath: m_TagString
+      value: Water
       objectReference: {fileID: 0}
     - target: {fileID: 1282219121056404672, guid: 53781fbfda6904a4c90381059518eb5a, type: 3}
       propertyPath: m_Materials.Array.data[0]

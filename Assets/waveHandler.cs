@@ -14,7 +14,7 @@ public class waveHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x,transform.position.y,transform.position.z - waveSpeed);
+        transform.position = new Vector3(transform.position.x,transform.position.y,transform.position.z - waveSpeed * Time.deltaTime);
         if (transform.position.z < -100)
             Destroy(this.gameObject);
     }

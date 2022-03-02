@@ -22,6 +22,7 @@ public class WindowCleaner : MonoBehaviour
     private float CPUInput = 0f;
     private float timeCheck;
     private float time;
+    private bool initialized;
 
     
     // Start is called before the first frame update
@@ -42,6 +43,8 @@ public class WindowCleaner : MonoBehaviour
         }
         img.Apply();
         mat.SetTexture("_splat", img);
+        targetPos = new Vector2(0.975f, 0.025f);
+        currentPos = new Vector2(0.975f, 0.025f);
         
         for (int i = 0; i < 5; i++)
         {
@@ -72,6 +75,7 @@ public class WindowCleaner : MonoBehaviour
         }
         if (pixDone >= 225) return true;
         return false;
+        
     }
 
     private void FixedUpdate()
@@ -84,8 +88,8 @@ public class WindowCleaner : MonoBehaviour
     private void Update()
     {
         CPU();
-        if (_sponge != null) _sponge.localPosition = new Vector3(Map(currentPos.x + 0.025f, 0, 1, 0.56f, 0.87f),
-            Map(currentPos.y, 0, 1, -0.1189f,0.091f ), -6.8342f);
+        if (_sponge != null) _sponge.localPosition = new Vector3(Map(currentPos.x, 0, 1, 0.545f, 0.885f),
+            Map(currentPos.y, 0, 1, -0.125f,0.11f ), -6.8342f);
     }
     public int GetID()
     {

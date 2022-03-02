@@ -23,7 +23,7 @@ public class OscMaster : MonoBehaviour
     public int GetSceneIndex = 0;
 
     [SerializeField] private Text _players;
-    [SerializeField] private Text ip;
+    [SerializeField] private TextMeshProUGUI ip;
     [SerializeField] private TextMeshProUGUI[] playernames;
     
     void Start()
@@ -53,7 +53,7 @@ public class OscMaster : MonoBehaviour
 
         _receiver.Bind("/player/*", PlayerRecieved);
 
-        ip.text = "Local IP: " + GetLocalIPv4();
+        if (ip != null) ip.text = "IP: " + GetLocalIPv4();
         
         SceneManager.activeSceneChanged += SceneManagerOnactiveSceneChanged;
     }

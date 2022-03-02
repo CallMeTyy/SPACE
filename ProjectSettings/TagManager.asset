@@ -8,6 +8,9 @@ TagManager:
   - Score
   - Platform
   - Lava
+  - Ground
+  - Water
+  - CPU
   layers:
   - Default
   - TransparentFX

@@ -54,6 +54,6 @@ public class IdleWalk : MonoBehaviour
             timer = Random.Range(2.0f, 7.0f);
         }
         else if (timer > 0) timer -= Time.deltaTime;
-        else targetX = Random.Range(-5.0f, 3.0f);
+        else targetX = Random.Range(-1.5f, 3.0f);
     }
 }
