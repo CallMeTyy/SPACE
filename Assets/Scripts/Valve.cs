@@ -104,6 +104,13 @@ public class Valve : MonoBehaviour
     void UpdateValve()
     {
         angle = 0.7f * angle + 0.3f * targetAngle;
+        if (angle % 360 < 2 && angle >= 360)
+        {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.pitch = Random.Range(0.25f, 0.5f);
+            audioSource.Play();
+        }
+
         _vfx.SetFloat("SpawnRate", angle);
         if (angle < 1800)
         {

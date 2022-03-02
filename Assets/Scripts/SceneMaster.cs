@@ -33,10 +33,18 @@ public class SceneMaster : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+    public void ClickSound()
+    {
+        GetComponents<AudioSource>()[1].Play();
+    }
+    public void Hover()
+    {
+        GetComponents<AudioSource>()[2].Play();
+    }
 
     private void Start()
     {
-        audioData = GetComponent<AudioSource>();
+        audioData = GetComponents<AudioSource>()[0];
 
         if (SceneManager.GetActiveScene().name == "SpaceHub") isInHub = true;
         else isInHub = false;

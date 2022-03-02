@@ -15,7 +15,7 @@ public class waveHandler : MonoBehaviour
     void Update()
     {
         transform.position = new Vector3(transform.position.x,transform.position.y,transform.position.z - waveSpeed * Time.deltaTime);
-        if (transform.position.z < -100)
+        if (transform.position.z < -150)
             Destroy(this.gameObject);
     }
 }

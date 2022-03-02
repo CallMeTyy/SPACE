@@ -13,6 +13,8 @@ public class IdleWalk : MonoBehaviour
     private SpriteRenderer _renderer;
     private TextMeshProUGUI _playerName;
     private int ID;
+    bool hasPlayed;
+    AudioSource source;
     
     // Start is called before the first frame update
     void Start()
@@ -25,14 +27,17 @@ public class IdleWalk : MonoBehaviour
         _animator = GetComponent<Animator>();
         _master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
         _playerName = GetComponentInChildren<TextMeshProUGUI>();
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_master.GetPlayerCount() >= ID)
+        if (_master.GetPlayerCount() >= ID && !hasPlayed)
         {
             _renderer.enabled = true;
+            hasPlayed = true;
+            source.Play();
         }
         else return;
         

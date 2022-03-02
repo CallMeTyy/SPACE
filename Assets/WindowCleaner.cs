@@ -135,6 +135,13 @@ public class WindowCleaner : MonoBehaviour
                     {
                         _light.color = Color.green;
                     }
+                    else { if (Random.Range(0, 2000) > 1900) 
+                        {
+                            AudioSource audioSource = GetComponent<AudioSource>();
+                            audioSource.pitch = Random.Range(0.9f,1.1f); ;
+                            audioSource.Play();
+                        } 
+                    }
                 }
             }
         }

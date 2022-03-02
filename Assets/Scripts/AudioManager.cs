@@ -52,6 +52,7 @@ public class AudioManager : MonoBehaviour
             case "Fire":
                 stopSound();
                 Play("Fire");
+                Play("FireSC");
                 break;
             case "Lazer":
                 stopSound();
@@ -71,6 +72,7 @@ public class AudioManager : MonoBehaviour
                 break;
             case "WaterPlanet":
                 stopSound();
+                Play("WaterPlanetSC");
                 Play("WaterPlanet");
                 break;
             case "Window":

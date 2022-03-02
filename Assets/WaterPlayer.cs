@@ -128,6 +128,7 @@ public class WaterPlayer : MonoBehaviour
         if (other.gameObject.CompareTag("Water") && !hitWater)
         {
             _rigidbody.AddForce(Vector3.back * pushBack, ForceMode.Impulse);
+            GetComponent<AudioSource>().Play();
             hitWater = true;
         }
 
