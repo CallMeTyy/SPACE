@@ -40,8 +40,8 @@ Material:
     - _TessMax: 40
     - _TessMin: 3
     - _TessValue: 32
-    - _Tiling: 0.1
-    - _WaveHeight: 0.312
+    - _Tiling: 0.04
+    - _WaveHeight: 0.6
     - _WaveSpeed: 0.26
     - _foamSize: 1
     m_Colors:

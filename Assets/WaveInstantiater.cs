@@ -32,7 +32,7 @@ public class WaveInstantiater : MonoBehaviour
         }
         if (Input.GetKeyUp("space"))
         {
-            var prefab = Instantiate(_wave, new Vector3(-5, 3.8f, 160),Quaternion.identity);
+            var prefab = Instantiate(_wave, new Vector3(-5, 3.79f, 160),Quaternion.identity);
             prefab.GetComponent<waveHandler>().waveSpeed = _waveSpeed;
         }
     }

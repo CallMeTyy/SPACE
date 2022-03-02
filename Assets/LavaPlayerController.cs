@@ -122,9 +122,9 @@ public class LavaPlayerController : MonoBehaviour
         }
         else
         {
+            ready = true;
             if (ID > 1)
             {
-                ready = true;
                 isBot = true;
                 timeCheck += Time.deltaTime;
                 if (timeCheck > timeBeforeWalk)

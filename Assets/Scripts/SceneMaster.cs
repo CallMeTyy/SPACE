@@ -29,7 +29,6 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Text _gameText;
     private OscMaster master;
     bool isPlayingAlarm;
-
     public void GoToScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -74,8 +73,13 @@ public class SceneMaster : MonoBehaviour
                         if (_mat[i].GetFloat("_isStuttering") == 0)
                             _mat[i].SetFloat("_isStuttering", 1);
                     }
-                    if (!isPlayingAlarm) AudioManager.instance.Play("Alarm"); isPlayingAlarm = true;
-                    
+                    if (!isPlayingAlarm)
+                    {
+                        AudioManager.instance.Play("Alarm"); 
+                        AudioManager.instance.playTime = AudioManager.instance.GetComponents<AudioSource>()[7].time; 
+                        AudioManager.instance.StopPlaying("SpaceHub"); 
+                        isPlayingAlarm = true;
+                    }
 
                     if (timer < 3f)
                     {
@@ -108,10 +112,10 @@ public class SceneMaster : MonoBehaviour
                                     break;
                             }
                         }
-                        _clock.text = "" + Mathf.Clamp((int) timer + 1, 1, 3);
+                        _clock.text = "" + Mathf.Clamp((int)timer + 1, 1, 3);
                     }
                 }
-                
+
             }
             else
             {
@@ -119,7 +123,7 @@ public class SceneMaster : MonoBehaviour
                 switch (master.GetSceneIndex)
                 {
                     case 0:
-                        GoToScene("Window");
+                        GoToScene("Fire");
                         break;
                     case 1:
                         GoToScene("MiniValve");
@@ -134,6 +138,9 @@ public class SceneMaster : MonoBehaviour
                         GoToScene("Volcano");
                         break;
                     case 5:
+                        GoToScene("WaterPlanet");
+                        break;
+                    case 6:
                         GoToScene("Win");
                         break;
                     default:

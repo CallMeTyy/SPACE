@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2903bf44296f72b45be6a5a4f5d5e05e
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _DisplacementMap1: {fileID: 2800000, guid: a17f3d6246cca514ca9bff65542964de, type: 3}
+  - _Obsidian: {fileID: 2800000, guid: 0e5dbd68f3f457346be16c2901f93f7d, type: 3}
+  - _NormalMap2: {fileID: 2800000, guid: af9b5252db975d7409c93e25ed8f498d, type: 3}
+  - _SpecularMap: {fileID: 2800000, guid: 918d3c0ab317fe0458f2e0f7c6e87466, type: 3}
+  - _AmbientOcclusionMap: {fileID: 2800000, guid: 67f0809ae9f97b149a5948803f802277, type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

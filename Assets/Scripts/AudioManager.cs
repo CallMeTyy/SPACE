@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
     private AudioSource[] allAudioSources;
     public static AudioManager instance;
+
+    public float playTime;
     void Awake()
     {
         if (instance == null)
@@ -44,7 +46,8 @@ public class AudioManager : MonoBehaviour
                 break;
             case "SpaceHub":
                 stopSound();
-            //Play("spaceHub");
+                GetComponents<AudioSource>()[7].time = playTime;
+                Play("SpaceHub");
             break;
             case "Fire":
                 stopSound();
@@ -62,6 +65,19 @@ public class AudioManager : MonoBehaviour
                 stopSound();
                 Play("Lobby");
                 break;
+            case "Volcano":
+                stopSound();
+                Play("LavaTheme");
+                break;
+            case "WaterPlanet":
+                stopSound();
+                Play("WaterPlanet");
+                break;
+            case "Window":
+                stopSound();
+                Play("Window");
+                break;
+
         }
     }
 
@@ -83,9 +99,6 @@ public class AudioManager : MonoBehaviour
         {
             return;
         }
-
-        
-
         s.source.Stop();
     }
     

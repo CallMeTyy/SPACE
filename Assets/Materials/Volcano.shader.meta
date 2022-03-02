@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c6d4dc074ed4c084cbea426a4880eaee
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Stylized_Cliff_Rock_001_basecolor: {fileID: 2800000, guid: a0e9223d9785fbc48b44e9f5a5fa47d2, type: 3}
+  - _Stylized_Cliff_Rock_001_normal: {fileID: 2800000, guid: d2e154c009cab01498c8ccf931145b58, type: 3}
+  - _Stylized_Cliff_Rock_001_roughness: {fileID: 2800000, guid: 21a03a87c084cbe4cb96dd112889273e, type: 3}
+  - _Stylized_Cliff_Rock_001_ambientOcclusion: {fileID: 2800000, guid: a0cfb6624161f284aa6bcb87cea3bf34, type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

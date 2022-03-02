@@ -44,7 +44,7 @@ Material:
     - _TessMin: 3
     - _TessPhongStrength: 0.5
     - _TessValue: 32
-    - _Tiling: 0.1
+    - _Tiling: 0.04
     - _TransAmbient: 0.1
     - _TransDirect: 0.9
     - _TransNormal: 0.5
@@ -52,7 +52,7 @@ Material:
     - _TransShadow: 0.5
     - _TransStrength: 1
     - _TransmissionShadow: 0.5
-    - _WaveHeight: 0.156
+    - _WaveHeight: 0.3
     - _WaveSpeed: 0.26
     - _foamSize: 1
     m_Colors:

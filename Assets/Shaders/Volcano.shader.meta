@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2ba9b9f3a09a7ec45b009a65ce6bcc83
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Lava_004_DISP: {fileID: 2800000, guid: 2fc047e0d2b2d9a45b135ec817da5194, type: 3}
+  - _Lava_004_COLOR: {fileID: 2800000, guid: b3116b22216c7544584fe1007356cde1, type: 3}
+  - _Lava_004_NORM: {fileID: 2800000, guid: e445b60d94858d44981fc4f39d4b9772, type: 3}
+  - _Lava_004_ROUGH: {fileID: 2800000, guid: 57868833e685aff43b1e43adfdc1939e, type: 3}
+  - _Lava_004_OCC: {fileID: 2800000, guid: d124ab86b6723114d90755410c4124fb, type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

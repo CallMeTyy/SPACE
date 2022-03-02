@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class FallingPlatforms : MonoBehaviour
 {
-    private float timer;
+    public float timer;
     private GameObject[] platforms;
     public float timeBetweenFalls = 5;
 
@@ -12,6 +13,7 @@ public class FallingPlatforms : MonoBehaviour
     private int fallen;
     private bool done;
     public ScoreMaster _master;
+    [SerializeField] private VisualEffect[] _vfx;
     
     // Start is called before the first frame update
     void Start()
@@ -33,16 +35,20 @@ public class FallingPlatforms : MonoBehaviour
         if (_master != null)
             if (!_master.isReady())
                 return;
+
         if (done) return;
+
         if (timer > 0)
         {
             timer -= Time.deltaTime;
             platforms[targetPlat].GetComponent<Animator>().enabled = true;
+            _vfx[targetPlat].SetFloat("SpawnRate", 1);
         }
         else
         {
             timer = timeBetweenFalls;
             platforms[targetPlat].GetComponent<Rigidbody>().isKinematic = false;
+            _vfx[targetPlat].SetFloat("SpawnRate", 0);
             GetNewPlat();
             fallen++;
         }

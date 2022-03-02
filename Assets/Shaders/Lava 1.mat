@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Flowmap:
-        m_Texture: {fileID: 2800000, guid: 6958e943ede809240a23418424d9e853, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3f4a8d7d68e6f904889d7a9e757a3a71, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normals:
@@ -88,7 +88,7 @@ Material:
     - _Smoothness: 4.39
     - _Speed: -0.1
     - _Strength: 0.02
-    - _TessValue: 16
+    - _TessValue: 2
     - _Tiling: -0.98
     - _TimeOffset: 0.5
     - __dirty: 0
