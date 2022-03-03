@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Dirty:
-        m_Texture: {fileID: 2800000, guid: e48156e656f35ce4ea704117ec1bd7f0, type: 3}
+        m_Texture: {fileID: 2800000, guid: afe51f65c0e21544ba3e0b9341492fad, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Splat:
