@@ -18,8 +18,8 @@ public class OscMaster : MonoBehaviour
     public List<string> names;
     private List<int> ports;
     public List<int> scores;
-    
 
+    public List<float> starX;
     public int GetSceneIndex = 0;
 
     [SerializeField] private Text _players;
@@ -32,6 +32,7 @@ public class OscMaster : MonoBehaviour
         phones = new List<string>();
         ips = new List<string>();
         ports = new List<int>();
+        starX = new List<float>();
         //scores = new List<int>(4);
         _transmitter = gameObject.AddComponent<OSCTransmitter>();
 
