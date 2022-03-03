@@ -27,6 +27,8 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Sprite[] icons;
     [SerializeField] private Image inputIcon;
     [SerializeField] private Text _gameText;
+    [SerializeField] private AudioSource _jet;
+    [SerializeField] private AudioSource _jetStarting;
     private OscMaster master;
     bool isPlayingAlarm;
     public void GoToScene(string sceneName)
@@ -68,11 +70,28 @@ public class SceneMaster : MonoBehaviour
 
             if (timer > 0)
             {
-
+                if (timer > 6.14f)
+                {
+                    if (!_jet.isPlaying)
+                    {
+                        _jet.Play();
+                    }
+                }
                 timer -= Time.deltaTime;
                 if (timer < 6.14f && index != 5)
                 {
+                    if (_jet.isPlaying)
+                        _jet.Stop();
                     if (!audioData.isPlaying) audioData.Play();
+
+                    if (Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 4))) > 0.5f)
+                    {
+                       
+                        _jetStarting.Play();
+                      
+                    }
+                    
+                    print(Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 2))));
 
                     _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
                     for (int i = 0; i < _mat.Length; i++)
@@ -80,6 +99,8 @@ public class SceneMaster : MonoBehaviour
                         anim[i].SetBool("isBreaking", true);
                         if (_mat[i].GetFloat("_isStuttering") == 0)
                             _mat[i].SetFloat("_isStuttering", 1);
+                        float stutterSpeed = _mat[i].GetFloat("_StutterSpeed");
+                        
                     }
                     if (!isPlayingAlarm)
                     {

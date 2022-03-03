@@ -613,6 +613,8 @@ MonoBehaviour:
   icons: []
   inputIcon: {fileID: 0}
   _gameText: {fileID: 0}
+  _jet: {fileID: 0}
+  _jetStarting: {fileID: 0}
 --- !u!4 &281679914
 Transform:
   m_ObjectHideFlags: 0
@@ -5124,9 +5126,9 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: Engine
-    clip: {fileID: 8300000, guid: 3a8c4d2dc0b53274988fc66c69294e3c, type: 3}
+    clip: {fileID: 8300000, guid: 25de3a0302f25d84b9ce46d7354a3972, type: 3}
     outputAudioMixerGroup: {fileID: 0}
-    volume: 0.096
+    volume: 0.3
     pitch: 1
     panning: -0.36
     loop: 1

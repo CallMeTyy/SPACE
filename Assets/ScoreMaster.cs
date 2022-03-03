@@ -108,7 +108,10 @@ public class ScoreMaster : MonoBehaviour
             {
                 if (!_lavas[i].gameObject.activeSelf) pdone++;
                 if (scores[i].x == 0 && !_lavas[i].gameObject.activeSelf)
+                {
+                    GetComponent<AudioSource>().Play();
                     scores[i] = new Vector2(_lavas[i].GetComponent<LavaPlayerController>().GetID(), Time.time);
+                }
             }
             
             if (_master != null && pdone >= 3)
