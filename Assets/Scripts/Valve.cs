@@ -14,7 +14,7 @@ public class Valve : MonoBehaviour
     [SerializeField] private Transform _valve;
     [SerializeField] private Text _text;
     private OSCReceiver _receiver;
-    private OscMaster _master;
+    private ScoreMaster _master;
     [SerializeField] private Light _light;
     [SerializeField] private VisualEffect _vfx;
 
@@ -29,7 +29,7 @@ public class Valve : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _master = GameObject.FindWithTag("Master")?.GetComponent<OscMaster>();
+        _master = GameObject.FindWithTag("Score")?.GetComponent<ScoreMaster>();
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/valve", RotateValve);
@@ -46,6 +46,7 @@ public class Valve : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_master.countReady) return;
         if (_master != null)
         {
             if (_master.GetPlayerCount() < 4)
@@ -96,6 +97,7 @@ public class Valve : MonoBehaviour
 
     void RotateValve(OSCMessage message)
     {
+        if (!_master.countReady) return;
         if (message.Values[0].IntValue == ID)
         {
             //_valve.localRotation = Quaternion.Euler(0,0,new Quaternion(message.Values[1].FloatValue,
@@ -107,6 +109,7 @@ public class Valve : MonoBehaviour
 
     void UpdateValve()
     {
+        
         angle = 0.7f * angle + 0.3f * targetAngle;
         if (angle % 360 < 2 && angle >= 180)
         {

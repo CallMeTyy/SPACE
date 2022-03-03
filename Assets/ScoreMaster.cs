@@ -14,9 +14,10 @@ public class ScoreMaster : MonoBehaviour
     [SerializeField] private WaterPlayer[] _water;
     [SerializeField] private LazerMaster _lazerMaster;
     [SerializeField] List<Vector2> scores;
-
+    public bool countReady;
     private string scene;
     private bool lavaReady = false;
+    [SerializeField] private GameObject countdown;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,7 @@ public class ScoreMaster : MonoBehaviour
             if (!p.GetComponent<LavaPlayerController>().ready) ready = false;
         }
         if (ready) lavaReady = true;
+        if (countdown != null && ready) countdown.SetActive(true);
         return ready;
     }
 

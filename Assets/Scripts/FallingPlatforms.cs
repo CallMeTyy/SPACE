@@ -33,7 +33,7 @@ public class FallingPlatforms : MonoBehaviour
     void Update()
     {
         if (_master != null)
-            if (!_master.isReady())
+            if (!_master.isReady() || !_master.countReady)
                 return;
 
         if (done) return;

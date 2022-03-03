@@ -12,15 +12,19 @@ public class WaveInstantiater : MonoBehaviour
     [SerializeField] private float speedUpSpeed = 20;
     private float initTBetween;
     private int wavesSent;
+
+    private ScoreMaster _master;
     // Start is called before the first frame update
     void Start()
     {
         initTBetween = timeBetween;
+        _master = GameObject.FindWithTag("Score")?.GetComponent<ScoreMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!_master.countReady) return;
         timer += Time.deltaTime;
         if (timer > timeBetween)
         {

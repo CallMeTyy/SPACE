@@ -27,7 +27,7 @@ public class RankMaster : MonoBehaviour
         string winnings = "";
         for (int i = 0; i < winners.Count; i++)
         {
-            winnings += (i+1) + "." + "Player " + (winners[i].x+1) + " - " + winners[i].y + "\n";
+            winnings += (i+1) + "." + _master.GetNames()[(int)winners[i].x] + " - " + winners[i].y + "\n";
         }
 
         _text.text = winnings;

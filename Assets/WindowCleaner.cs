@@ -55,6 +55,7 @@ public class WindowCleaner : MonoBehaviour
     
     void Clean(OSCMessage message)
     {
+        if (!_master.countReady) return;
         //print(message);
         if (message.Values[0].IntValue == ID)
         {
@@ -80,6 +81,7 @@ public class WindowCleaner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_master.countReady) return;
         if (win) return;
         currentPos = currentPos * 0.8f + targetPos * 0.2f;
         Brush(currentPos.x, currentPos.y);
@@ -87,6 +89,7 @@ public class WindowCleaner : MonoBehaviour
 
     private void Update()
     {
+        if (!_master.countReady) return;
         CPU();
         if (_sponge != null) _sponge.localPosition = new Vector3(Map(currentPos.x, 0, 1, 0.545f, 0.885f),
             Map(currentPos.y, 0, 1, -0.125f,0.11f ), -6.8342f);

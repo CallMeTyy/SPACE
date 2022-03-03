@@ -27,6 +27,7 @@ public class LavaPlayerController : MonoBehaviour
     [SerializeField] private Text okText;
     [SerializeField] private GameObject canvas;
 
+
     public bool ready = false;
     private bool lesgo;
 
@@ -79,6 +80,7 @@ public class LavaPlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         if (_master != null)
         {
             if (!_master.isReady()) return;
@@ -94,6 +96,7 @@ public class LavaPlayerController : MonoBehaviour
                 lesgo = true;
             }
         }
+        if (!_master.countReady) return;
         _rigidbody.velocity =
             new Vector3(_rigidbody.velocity.x * 0.9f, _rigidbody.velocity.y, _rigidbody.velocity.z * 0.9f);
         if (new Vector2(_rigidbody.velocity.x, _rigidbody.velocity.z).magnitude > 0.1f) _animator.SetBool("walking", true);

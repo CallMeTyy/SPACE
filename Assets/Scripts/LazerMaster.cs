@@ -13,7 +13,7 @@ public class LazerMaster : MonoBehaviour
     public float T2Score;
     private OSCReceiver _receiver;
 
-    private OscMaster _master;
+    private ScoreMaster _master;
 
     private float speed = 0.0025f;
     private float timeCheck;
@@ -24,7 +24,7 @@ public class LazerMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _master = GameObject.FindWithTag("Master")?.GetComponent<OscMaster>();
+        _master = GameObject.FindWithTag("Score")?.GetComponent<ScoreMaster>();
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/laser", accelInput);
@@ -102,6 +102,7 @@ public class LazerMaster : MonoBehaviour
 
     void accelInput(OSCMessage message)
     {
+        if (!_master.countReady) return;
         if (message.Values[0].IntValue == 1 || message.Values[0].IntValue == 3)
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)

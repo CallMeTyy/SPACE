@@ -53,7 +53,6 @@ public class WaterPlayer : MonoBehaviour
 
     void MessageRecieved(OSCMessage message)
     {
-        print(message);
         if (message.Values[0].IntValue == ID)
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)
@@ -73,7 +72,7 @@ public class WaterPlayer : MonoBehaviour
     private void FixedUpdate()
     {
         if (dead) return;
-        if (_master != null) if (!_master.isReady()) return;
+        if (_master != null) if (!_master.countReady) return;
         _rigidbody.velocity =
             new Vector3(_rigidbody.velocity.x * 0.9f, _rigidbody.velocity.y, _rigidbody.velocity.z * 0.9f);
         float v = _rigidbody.velocity.y;

@@ -91,7 +91,7 @@ public class FireMaster : MonoBehaviour
 
     void UpdateFire()
     {
-        
+        if (!_master.countReady) return;
         _mat.SetFloat("_FlameAmount", fireValue - 1);
         for (int i = 0; i < _vfx.Length; i++)
         _vfx[i].SetFloat("SpawnRate", fireValue - 1);
