@@ -28,8 +28,10 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Image inputIcon;
     [SerializeField] private Text _gameText;
     [SerializeField] private AudioSource _jet;
-    [SerializeField] private AudioSource _jetStarting;
+    [SerializeField] private AudioSource[] _jetStarting;
+    [SerializeField] private List<string> scenes;
     private OscMaster master;
+    float[] rtime = new float[4];
     bool isPlayingAlarm;
     public void GoToScene(string sceneName)
     {
@@ -58,8 +60,13 @@ public class SceneMaster : MonoBehaviour
         for (int i = 0; i < _mat.Length; i++)
         {
             _mat[i].SetFloat("_isStuttering", 0);
-
+            
         }
+        for (int j = 0; j < _jetStarting.Length; j++)
+        {
+            rtime[j] = 3.14f - Random.Range(0.1f, 0.2f);
+        }
+       
         master = GameObject.FindWithTag("Master").GetComponent<OscMaster>();
     }
 
@@ -78,19 +85,24 @@ public class SceneMaster : MonoBehaviour
                     }
                 }
                 timer -= Time.deltaTime;
-                if (timer < 3.14f && index != 5)
+                if (timer < 3.14f && scenes.Count != 0)
                 {
                     if (_jet.isPlaying)
                         _jet.Stop();
                     if (!audioData.isPlaying) audioData.Play();
 
-                    if (Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 4))) > 0.5f)
-                    {
-                       
-                        _jetStarting.Play();
-                      
+                    for (int i = 0; i < _jetStarting.Length; i++) {
+                        if (!_jetStarting[i].isPlaying)
+                        {                            
+                            if (timer < rtime[i])
+                            {
+                                _jetStarting[i].Play();
+                                rtime[i] -= Random.Range(0.24f, 0.5f);
+                            }
+                        }
+                            
                     }
-                    
+
                     print(Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 2))));
 
                     _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
@@ -109,40 +121,18 @@ public class SceneMaster : MonoBehaviour
                         AudioManager.instance.playTime = AudioManager.instance.GetComponents<AudioSource>()[7].time;
                         AudioManager.instance.StopPlaying("SpaceHub");
                         isPlayingAlarm = true;
-                    }
+                    }                
                 }
 
             }
             else
             {
                 AudioManager.instance.StopPlaying("Alarm");
-                switch (master.GetSceneIndex)
-                {
-                    case 0:
-                        GoToScene("Fire");
-                        break;
-                    case 1:
-                        GoToScene("MiniValve");
-                        break;
-                    case 2:
-                        GoToScene("Lazer");
-                        break;
-                    case 3:
-                        GoToScene("Window");
-                        break;
-                    case 4:
-                        GoToScene("Volcano");
-                        break;
-                    case 5:
-                        GoToScene("WaterPlanet");
-                        break;
-                    case 6:
-                        GoToScene("Win");
-                        break;
-                    default:
-                        timer = Random.Range(12, 16);
-                        break;
-                }
+                if (scenes.Count == 0) GoToScene("Win");
+                int iii = Random.Range(0, scenes.Count);
+                string sceneN = scenes[iii];
+                GoToScene(sceneN);
+                scenes.RemoveAt(iii);
                 master.GetSceneIndex++;
             }
         }

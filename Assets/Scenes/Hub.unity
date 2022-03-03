@@ -590,7 +590,8 @@ MonoBehaviour:
   inputIcon: {fileID: 0}
   _gameText: {fileID: 0}
   _jet: {fileID: 0}
-  _jetStarting: {fileID: 0}
+  _jetStarting:
+  - {fileID: 0}
 --- !u!4 &281679914
 Transform:
   m_ObjectHideFlags: 0
@@ -5055,7 +5056,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: WaterPlanetSC
-    clip: {fileID: 8300000, guid: fe02c552f877b1447b915f0dd0eaeff3, type: 3}
+    clip: {fileID: 8300000, guid: d20e95d27adeed24fa8b6b67564db5b9, type: 3}
     outputAudioMixerGroup: {fileID: 0}
     volume: 0.5
     pitch: 1
@@ -5071,7 +5072,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: Lava
-    clip: {fileID: 8300000, guid: 861ddb2c85853b2459b0c347b3fa669f, type: 3}
+    clip: {fileID: 8300000, guid: b809e6e5f5b3e774faadf51b0993e34b, type: 3}
     outputAudioMixerGroup: {fileID: 0}
     volume: 0.5
     pitch: 1

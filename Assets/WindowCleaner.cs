@@ -61,6 +61,14 @@ public class WindowCleaner : MonoBehaviour
         {
             targetPos.x = message.Values[1].FloatValue;
             targetPos.y = message.Values[2].FloatValue;
+
+            if (Random.Range(0, 2000) > 1500)
+            {
+                AudioSource audioSource = GetComponent<AudioSource>();
+                audioSource.pitch = Random.Range(0.8f, 1.2f); ;
+                audioSource.Play();
+                print("Playing sound");
+            }
         }
     }
 
@@ -111,6 +119,12 @@ public class WindowCleaner : MonoBehaviour
                     timeCheck += Time.deltaTime;
                     if (timeCheck > time)
                     {
+                        AudioSource audioSource = GetComponent<AudioSource>();
+                        if (!audioSource.isPlaying && Random.Range(0,2) < 1)
+                        {
+                            audioSource.pitch = Random.Range(0.8f, 1.2f); ;
+                            audioSource.Play();
+                        }
                         time = Random.value;
                         timeCheck = 0;
                         targetPos = new Vector2(Random.value, Random.value);
@@ -138,12 +152,12 @@ public class WindowCleaner : MonoBehaviour
                     {
                         _light.color = Color.green;
                     }
-                    else { if (Random.Range(0, 2000) > 1900) 
+                    else { /*if (Random.Range(0, 2000) > 1900) 
                         {
                             AudioSource audioSource = GetComponent<AudioSource>();
                             audioSource.pitch = Random.Range(0.9f,1.1f); ;
                             audioSource.Play();
-                        } 
+                        } */
                     }
                 }
             }
