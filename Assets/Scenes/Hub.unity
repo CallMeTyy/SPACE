@@ -592,6 +592,7 @@ MonoBehaviour:
   _jet: {fileID: 0}
   _jetStarting:
   - {fileID: 0}
+  scenes: []
 --- !u!4 &281679914
 Transform:
   m_ObjectHideFlags: 0

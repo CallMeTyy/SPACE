@@ -30,6 +30,8 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private AudioSource _jet;
     [SerializeField] private AudioSource[] _jetStarting;
     [SerializeField] private List<string> scenes;
+    [SerializeField] private string overrideScene = "";
+    [SerializeField] private bool or;
     private OscMaster master;
     float[] rtime = new float[4];
     bool isPlayingAlarm;
@@ -128,7 +130,17 @@ public class SceneMaster : MonoBehaviour
             else
             {
                 AudioManager.instance.StopPlaying("Alarm");
-                if (scenes.Count == 0) GoToScene("Win");
+                if (or)
+                {
+                    GoToScene(overrideScene);
+                    return;
+                }
+
+                if (scenes.Count == 0)
+                {
+                    GoToScene("Win");
+                    return;
+                }
                 int iii = Random.Range(0, scenes.Count);
                 string sceneN = scenes[iii];
                 GoToScene(sceneN);

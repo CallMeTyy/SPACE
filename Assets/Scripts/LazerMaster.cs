@@ -18,8 +18,11 @@ public class LazerMaster : MonoBehaviour
     private float speed = 0.0025f;
     private float timeCheck;
     private int CPUInput;
+    private bool intersect;
+    private bool finishSound;
 
     [SerializeField] private VisualEffect[] _vfx;
+    [SerializeField] private AudioSource[] audios;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +39,11 @@ public class LazerMaster : MonoBehaviour
         CPU();
         _t13.localScale = new Vector3(map(T1Score, 0, 1, 0.008f, 0.12f), 0.2f, 0.1f);
         _t24.localScale = new Vector3(map(T2Score, 0, 1, 0.008f, 0.12f), 0.2f, 0.1f);
+        if (Mathf.Max(T1Score, T2Score) > 0.94f && !finishSound)
+        {
+            audios[5].Play();
+            finishSound = true;
+        }
     }
     
     public float map(float x, float in_min, float in_max, float out_min, float out_max)
@@ -103,6 +111,12 @@ public class LazerMaster : MonoBehaviour
     void accelInput(OSCMessage message)
     {
         if (!_master.countReady) return;
+        else if (audios[0].isPlaying)
+        {
+            audios[0].Stop();
+            audios[1].Stop();
+        }
+        if (!audios[2].isPlaying) audios[2].Play();
         if (message.Values[0].IntValue == 1 || message.Values[0].IntValue == 3)
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)
@@ -111,6 +125,18 @@ public class LazerMaster : MonoBehaviour
             if (T1Score + T2Score >= 1)
             {
                 T2Score -= speed;
+                if (!audios[3].isPlaying)
+                {
+                    audios[3].Play();
+                    audios[3].panStereo = map(T1Score, 0, 1, -0.5f, 0.5f);
+                }
+            } else if (T1Score + T2Score > 0.9f)
+            {
+                if (!audios[4].isPlaying)
+                {
+                    audios[4].Play();
+                    intersect = true;
+                }
             }
         }
 
