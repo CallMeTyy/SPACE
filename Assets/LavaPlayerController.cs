@@ -22,10 +22,12 @@ public class LavaPlayerController : MonoBehaviour
     private float CPUInput = 0f;
     private float timeCheck;
     private Vector3 targetPos;
+    
 
     private SpriteRenderer _rend;
     [SerializeField] private Text okText;
     [SerializeField] private GameObject canvas;
+    [SerializeField] private GameObject head;
 
 
     public bool ready = false;
@@ -130,7 +132,9 @@ public class LavaPlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Lava"))
         {
             GetComponent<AudioSource>().Play();
-            gameObject.SetActive(false); 
+            head.SetActive(true);
+            gameObject.SetActive(false);
+            
         }
     }
 

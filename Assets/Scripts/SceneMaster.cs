@@ -53,7 +53,7 @@ public class SceneMaster : MonoBehaviour
 
         if (isInHub)
         {
-            timer = Random.Range(8, 12) + 3;
+            timer = Random.Range(8, 12);
         }
         for (int i = 0; i < _mat.Length; i++)
         {
@@ -70,7 +70,7 @@ public class SceneMaster : MonoBehaviour
 
             if (timer > 0)
             {
-                if (timer > 6.14f)
+                if (timer > 3.14f)
                 {
                     if (!_jet.isPlaying)
                     {
@@ -78,7 +78,7 @@ public class SceneMaster : MonoBehaviour
                     }
                 }
                 timer -= Time.deltaTime;
-                if (timer < 6.14f && index != 5)
+                if (timer < 3.14f && index != 5)
                 {
                     if (_jet.isPlaying)
                         _jet.Stop();
@@ -102,46 +102,13 @@ public class SceneMaster : MonoBehaviour
                         float stutterSpeed = _mat[i].GetFloat("_StutterSpeed");
                         
                     }
+
                     if (!isPlayingAlarm)
                     {
-                        AudioManager.instance.Play("Alarm"); 
-                        AudioManager.instance.playTime = AudioManager.instance.GetComponents<AudioSource>()[7].time; 
-                        AudioManager.instance.StopPlaying("SpaceHub"); 
+                        AudioManager.instance.Play("Alarm");
+                        AudioManager.instance.playTime = AudioManager.instance.GetComponents<AudioSource>()[7].time;
+                        AudioManager.instance.StopPlaying("SpaceHub");
                         isPlayingAlarm = true;
-                    }
-
-                    if (timer < 3f)
-                    {
-                        if (!_warnin.activeSelf)
-                        {
-                            _warnin.SetActive(true);
-                            switch (master.GetSceneIndex)
-                            {
-                                case 0:
-                                    inputIcon.sprite = icons[0];
-                                    _gameText.text = "Blow out the Fire!";
-                                    break;
-                                case 1:
-                                    inputIcon.sprite = icons[1];
-                                    _gameText.text = "Rotate your phone to close the valve!";
-                                    break;
-                                case 2:
-                                    inputIcon.sprite = icons[2];
-                                    _gameText.text = "Shake to power up the laser!";
-                                    break;
-                                case 3:
-                                    inputIcon.sprite = icons[3];
-                                    _gameText.text = "Clean the window with touch input!";
-                                    break;
-                                case 4:
-                                    inputIcon.sprite = icons[1];
-                                    _gameText.text = "Use phone rotation to avoid falling!";
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        _clock.text = "" + Mathf.Clamp((int)timer + 1, 1, 3);
                     }
                 }
 

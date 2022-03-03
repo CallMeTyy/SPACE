@@ -8,6 +8,8 @@ public class RankMaster : MonoBehaviour
 {
     private OscMaster _master;
     [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private Sprite[] sprites;
+    [SerializeField] private Image[] _heads;
     private List<Vector2> winners;
 
     // Start is called before the first frame update
@@ -28,6 +30,7 @@ public class RankMaster : MonoBehaviour
         for (int i = 0; i < winners.Count; i++)
         {
             winnings += (i+1) + "." + _master.GetNames()[(int)winners[i].x] + " - " + winners[i].y + "\n";
+            _heads[i].sprite = sprites[(int) winners[i].x];
         }
 
         _text.text = winnings;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using extOSC;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class WaterPlayer : MonoBehaviour
@@ -19,6 +20,7 @@ public class WaterPlayer : MonoBehaviour
     private Vector3 targetPos;
 
     private SpriteRenderer _rend;
+    [SerializeField] private Image face;
 
     public bool ready = false;
     private bool grounded;
@@ -30,7 +32,10 @@ public class WaterPlayer : MonoBehaviour
     [SerializeField] private Sprite[] sheet;
     [SerializeField] private GameObject shadowCube;
 
+    public int timesHit;
+
     private bool hitWater;
+    private float hitTimer;
 
     private float timeBeforeWalk;
     // Start is called before the first frame update
@@ -74,7 +79,7 @@ public class WaterPlayer : MonoBehaviour
         if (dead) return;
         if (_master != null) if (!_master.countReady) return;
         _rigidbody.velocity =
-            new Vector3(_rigidbody.velocity.x * 0.9f, _rigidbody.velocity.y, _rigidbody.velocity.z * 0.9f);
+            new Vector3(_rigidbody.velocity.x * 0.9f, _rigidbody.velocity.y, 0);
         float v = _rigidbody.velocity.y;
         if (Mathf.Abs(v) > 7)
         {
@@ -103,6 +108,8 @@ public class WaterPlayer : MonoBehaviour
 
     private void Update()
     {
+        if (hitTimer > 0) hitTimer -= Time.deltaTime;
+        else if (hitWater) hitWater = false;
         //CPU();
         if (timeCheck > -1) timeCheck += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.W) && ID == 1 && grounded)
@@ -115,9 +122,10 @@ public class WaterPlayer : MonoBehaviour
             jump = true;
             timeCheck = -1;
         }
-        if (transform.position.z < -85 && !dead)
+        if (timesHit >= 3 && !dead)
         {
             dead = true;
+            face.gameObject.SetActive(true);
             GetComponent<SpriteRenderer>().color = Color.gray;
         }
     }
@@ -126,7 +134,10 @@ public class WaterPlayer : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Water") && !hitWater)
         {
-            _rigidbody.AddForce(Vector3.back * pushBack, ForceMode.Impulse);
+            transform.position+= Vector3.back * pushBack;
+            timesHit++;
+            hitTimer = 0.5f;
+            if (timesHit >= 3) transform.Translate(Vector3.back * 50);
             GetComponent<AudioSource>().Play();
             hitWater = true;
         }
@@ -136,14 +147,6 @@ public class WaterPlayer : MonoBehaviour
             cpuGrounded = false;
             timeCheck = 0;
             timeBeforeWalk = Random.value;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Water"))
-        {
-            hitWater = false;
         }
     }
 

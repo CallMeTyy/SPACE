@@ -17,6 +17,7 @@ public class Valve : MonoBehaviour
     private ScoreMaster _master;
     [SerializeField] private Light _light;
     [SerializeField] private VisualEffect _vfx;
+    [SerializeField] private GameObject _wrongText;
 
     private int ID = -1;
     private float angle = 0;
@@ -109,7 +110,8 @@ public class Valve : MonoBehaviour
 
     void UpdateValve()
     {
-        
+        if (targetAngle < angle) _wrongText.SetActive(true);
+        else _wrongText.SetActive(false);
         angle = 0.7f * angle + 0.3f * targetAngle;
         if (angle % 360 < 2 && angle >= 180)
         {
