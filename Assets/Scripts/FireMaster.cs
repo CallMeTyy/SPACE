@@ -21,15 +21,19 @@ public class FireMaster : MonoBehaviour
     private float CPUInput = 0f;
     private float timeCheck;
 
+    public float winTime = float.MaxValue;
+    bool win;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        winTime = float.MaxValue;
         _master = GameObject.FindWithTag("Score")?.GetComponent<ScoreMaster>();
         _receiver = gameObject.AddComponent<OSCReceiver>();
         _receiver.LocalPort = 7204;
         _receiver.Bind("/player/*/mic", Fire);
-
+        _mat.SetFloat("_FlameAmount", fireValue - 1);
         for (int i = 0; i < 5; i++)
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
@@ -38,6 +42,11 @@ public class FireMaster : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (fireValue <= 0 && !win)
+        {
+            win = true;
+            winTime = Time.time;
+        }
         if (_master != null)
         {
             if (_master.GetPlayerCount() < 4)

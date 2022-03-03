@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class moveSolarSystem : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class moveSolarSystem : MonoBehaviour
     public int ID;
     bool yeet;
     bool init;
+    bool show = true;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +48,15 @@ public class moveSolarSystem : MonoBehaviour
                 
             }
         }
+
+        if (transform.position.x > 40)
+        {
+            show = false;
+            foreach (Transform t in transform)
+            {
+                t.gameObject.SetActive(false);
+            }
+        }
         
         
     }
@@ -53,6 +64,14 @@ public class moveSolarSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (transform.position.x < 40 && !show)
+        {
+            show = true;
+            foreach (Transform t in transform)
+            {
+                t.gameObject.SetActive(true);
+            }
+        }
         timer += Time.deltaTime;
         if (timer > 0.2f && !yeet)
         {
@@ -70,7 +89,7 @@ public class moveSolarSystem : MonoBehaviour
 
         if (useZ)
             transform.position = new Vector3(transform.position.x, transform.position.y, (speed * Time.deltaTime) + transform.position.z);
-
+        if (SceneManager.GetActiveScene().name != "SpaceHub") return;
         if (_master != null)
         {
             _master.starX[ID-1] = transform.position.x;

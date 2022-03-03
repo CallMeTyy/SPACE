@@ -29,7 +29,6 @@ public class SceneMaster : MonoBehaviour
     [SerializeField] private Text _gameText;
     [SerializeField] private AudioSource _jet;
     [SerializeField] private AudioSource[] _jetStarting;
-    [SerializeField] private List<string> scenes;
     [SerializeField] private string overrideScene = "";
     [SerializeField] private bool or;
     private OscMaster master;
@@ -87,25 +86,25 @@ public class SceneMaster : MonoBehaviour
                     }
                 }
                 timer -= Time.deltaTime;
-                if (timer < 3.14f && scenes.Count != 0)
+                if (timer < 3.14f && master.scenes.Count != 0)
                 {
                     if (_jet.isPlaying)
                         _jet.Stop();
                     if (!audioData.isPlaying) audioData.Play();
 
                     for (int i = 0; i < _jetStarting.Length; i++) {
-                        if (!_jetStarting[i].isPlaying)
-                        {                            
+                                                   
                             if (timer < rtime[i])
                             {
+                                _jetStarting[i].Stop();
                                 _jetStarting[i].Play();
-                                rtime[i] -= Random.Range(0.24f, 0.5f);
+                                rtime[i] -= Random.Range(0.35f, 0.7f);
                             }
-                        }
+                        
                             
                     }
 
-                    print(Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 2))));
+                    //print(Mathf.Abs(Mathf.Sin(timer * (_blinkSpeed * 2))));
 
                     _img.color = Mathf.Abs(Mathf.Sin(timer * _blinkSpeed)) * _color;
                     for (int i = 0; i < _mat.Length; i++)
@@ -136,15 +135,15 @@ public class SceneMaster : MonoBehaviour
                     return;
                 }
 
-                if (scenes.Count == 0)
+                if (master.scenes.Count == 0)
                 {
                     GoToScene("Win");
                     return;
                 }
-                int iii = Random.Range(0, scenes.Count);
-                string sceneN = scenes[iii];
+                int iii = Random.Range(0, master.scenes.Count);
+                string sceneN = master.scenes[iii];
                 GoToScene(sceneN);
-                scenes.RemoveAt(iii);
+                master.scenes.RemoveAt(iii);
                 master.GetSceneIndex++;
             }
         }

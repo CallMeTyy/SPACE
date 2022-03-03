@@ -25,6 +25,10 @@ public class Valve : MonoBehaviour
 
     private float timeCheck;
     private int CPUInput;
+
+    private bool isFinished;
+
+    public float winTime = float.MaxValue;
     
     
     // Start is called before the first frame update
@@ -47,7 +51,7 @@ public class Valve : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_master.countReady) return;
+        if (!_master.countReady || isFinished) return;
         if (_master != null)
         {
             if (_master.GetPlayerCount() < 4)
@@ -98,7 +102,7 @@ public class Valve : MonoBehaviour
 
     void RotateValve(OSCMessage message)
     {
-        if (!_master.countReady) return;
+        if (!_master.countReady || isFinished) return;
         if (message.Values[0].IntValue == ID)
         {
             //_valve.localRotation = Quaternion.Euler(0,0,new Quaternion(message.Values[1].FloatValue,
@@ -110,7 +114,7 @@ public class Valve : MonoBehaviour
 
     void UpdateValve()
     {
-        if (targetAngle < angle) _wrongText.SetActive(true);
+        if (targetAngle < angle && !isFinished) _wrongText.SetActive(true);
         else _wrongText.SetActive(false);
         angle = 0.7f * angle + 0.3f * targetAngle;
         if (angle % 360 < 2 && angle >= 180)
@@ -130,6 +134,8 @@ public class Valve : MonoBehaviour
         {
             GetComponents<AudioSource>()[1].Stop();
             _light.color = Color.green;
+            isFinished = true;
+            winTime = Time.time;
         }
         
         if (_text != null) _text.text = "Angle: " + angle + "/420";

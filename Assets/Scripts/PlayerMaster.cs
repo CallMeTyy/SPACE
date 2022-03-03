@@ -21,7 +21,7 @@ public class PlayerMaster : MonoBehaviour
             targetX[i] = _players[i].position.x + _master.GetScores()[i] / 28f * 7f;
             //targetY[i] = _players[i].position.y;
             //deftargetY[i] = _players[i].position.y;
-            print(targetX[i]);
+            //print(targetX[i]);
         }
     }
 

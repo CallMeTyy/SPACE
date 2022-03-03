@@ -28,12 +28,20 @@ public class LavaPlayerController : MonoBehaviour
     [SerializeField] private Text okText;
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject head;
+    [SerializeField] AudioSource[] _clip;
+
+    Quaternion initRot;
 
 
     public bool ready = false;
+    bool hahaha;
     private bool lesgo;
+    float viezeTimer;
+    float prevX;
+    float prevV;
 
     private float timeBeforeWalk;
+    public float timeOfDeath;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,13 +73,19 @@ public class LavaPlayerController : MonoBehaviour
     {
         if (msg.Values[0].IntValue == ID)
         {
-            if (!ready)
+            if (!ready && !hahaha)
             {
                 okText.text = "OK";
                 ready = true;
+                hahaha = true;
+                initRot = new Quaternion(msg.Values[1].FloatValue, msg.Values[2].FloatValue, msg.Values[3].FloatValue, msg.Values[4].FloatValue);
             }
-            horizontalValue = msg.Values[2].FloatValue;
-            verticalValue = msg.Values[1].FloatValue;
+            
+            Vector3 rot = new Quaternion(msg.Values[1].FloatValue, msg.Values[2].FloatValue, msg.Values[3].FloatValue, msg.Values[4].FloatValue).eulerAngles;
+            Quaternion lerot = Quaternion.Inverse(initRot) * new Quaternion(msg.Values[1].FloatValue, msg.Values[2].FloatValue, msg.Values[3].FloatValue, msg.Values[4].FloatValue);
+            horizontalValue = lerot.y;
+            verticalValue = lerot.x;
+            viezeTimer = 0.2f;
         }
     }
 
@@ -111,28 +125,36 @@ public class LavaPlayerController : MonoBehaviour
                 targetPos.z - transform.position.z).normalized * speed, ForceMode.VelocityChange);
             return;
         }
-        if (Mathf.Abs(horizontalValue) > 0.2f)
+        if (Mathf.Abs(horizontalValue) > 0.1f)
         {
-            _rigidbody.AddForce(Vector3.right * speed * Mathf.Sign(horizontalValue), ForceMode.VelocityChange);
+            _rigidbody.AddForce(Vector3.right * speed * -Mathf.Sign(horizontalValue), ForceMode.VelocityChange);
 
         }
-        if (Mathf.Abs(verticalValue) > 0.2f)
+        if (Mathf.Abs(verticalValue) > 0.1f)
         {
-            _rigidbody.AddForce(Vector3.back * speed * Mathf.Sign(verticalValue), ForceMode.VelocityChange);
+            _rigidbody.AddForce(Vector3.back * speed * -Mathf.Sign(verticalValue), ForceMode.VelocityChange);
         }
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) ready = true;
         CPU();
+        viezeTimer -= Time.deltaTime;
+        if (viezeTimer < 0)
+        {
+            horizontalValue = 0;
+            verticalValue = 0;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Lava"))
         {
-            GetComponent<AudioSource>().Play();
+            _clip[ID-1].Play();
             head.SetActive(true);
+            timeOfDeath = Time.time;
             gameObject.SetActive(false);
             
         }

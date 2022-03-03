@@ -13,7 +13,6 @@ public class FallingPlatforms : MonoBehaviour
     private int fallen;
     private bool done;
     public ScoreMaster _master;
-    [SerializeField] private VisualEffect[] _vfx;
     
     // Start is called before the first frame update
     void Start()
@@ -42,13 +41,12 @@ public class FallingPlatforms : MonoBehaviour
         {
             timer -= Time.deltaTime;
             platforms[targetPlat].GetComponent<Animator>().enabled = true;
-            _vfx[targetPlat].SetFloat("SpawnRate", 1);
+            platforms[targetPlat].GetComponentInChildren<VisualEffect>().SetFloat("SpawnRate", 1);
         }
         else
         {
             timer = timeBetweenFalls;
             platforms[targetPlat].GetComponent<Rigidbody>().isKinematic = false;
-            _vfx[targetPlat].SetFloat("SpawnRate", 0);
             GetNewPlat();
             fallen++;
         }

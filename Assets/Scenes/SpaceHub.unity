@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.017724834, g: 0.0058981865, b: 0.03127585, a: 1}
+  m_IndirectSpecularColor: {r: 0.017803371, g: 0.00597672, b: 0.031354375, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -572,10 +572,10 @@ AudioSource:
   m_GameObject: {fileID: 128484786}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5431b7f3d26789c47870b136b87764ae, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 9d51ce7a5a2d7624bbeecef0289433d6, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 66d72fd2907d4c54195e600b17c44961, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -649,7 +649,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -797,10 +797,10 @@ AudioSource:
   m_GameObject: {fileID: 152984528}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5431b7f3d26789c47870b136b87764ae, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 9d51ce7a5a2d7624bbeecef0289433d6, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 66d72fd2907d4c54195e600b17c44961, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -874,7 +874,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1179,6 +1179,10 @@ PrefabInstance:
     - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
       propertyPath: m_Name
       value: System 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
@@ -1690,6 +1694,7 @@ MonoBehaviour:
   useX: 1
   useY: 0
   useZ: 0
+  _rend: []
   ID: 0
 --- !u!4 &390131441
 Transform:
@@ -2064,10 +2069,10 @@ AudioSource:
   m_GameObject: {fileID: 478632496}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5431b7f3d26789c47870b136b87764ae, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 9d51ce7a5a2d7624bbeecef0289433d6, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 66d72fd2907d4c54195e600b17c44961, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2141,7 +2146,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2784,7 +2789,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.45
+  m_fontSize: 37.1
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3125,6 +3130,7 @@ MonoBehaviour:
   useX: 1
   useY: 0
   useZ: 0
+  _rend: []
   ID: 0
 --- !u!4 &652707039
 Transform:
@@ -3252,6 +3258,10 @@ PrefabInstance:
     - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
       propertyPath: m_Name
       value: System 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
@@ -5451,14 +5461,7 @@ MonoBehaviour:
   - {fileID: 152984530}
   - {fileID: 478632498}
   - {fileID: 128484788}
-  scenes:
-  - Fire
-  - MiniValve
-  - Window
-  - Volcano
-  - Lazer
-  - WaterPlanet
-  overrideScene: Lazer
+  overrideScene: MiniValve
   or: 0
 --- !u!4 &1130381427
 Transform:
@@ -5582,7 +5585,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3cc3dc1a46879794b8a296ddad313b22, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -6149,6 +6152,7 @@ MonoBehaviour:
   useX: 1
   useY: 0
   useZ: 0
+  _rend: []
   ID: 0
 --- !u!4 &1241410411
 Transform:
@@ -6341,6 +6345,7 @@ MonoBehaviour:
   useX: 1
   useY: 0
   useZ: 0
+  _rend: []
   ID: 0
 --- !u!4 &1263884018
 Transform:
@@ -6584,7 +6589,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.25
+  m_fontSize: 36.5
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6839,10 +6844,10 @@ AudioSource:
   m_GameObject: {fileID: 1395848500}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5431b7f3d26789c47870b136b87764ae, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 9d51ce7a5a2d7624bbeecef0289433d6, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 66d72fd2907d4c54195e600b17c44961, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6916,7 +6921,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -8000,6 +8005,61 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1810355529}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1818682378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1818682380}
+  - component: {fileID: 1818682379}
+  m_Layer: 0
+  m_Name: Audio Reverb Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!167 &1818682379
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818682378}
+  m_Enabled: 1
+  m_MinDistance: 10
+  m_MaxDistance: 15
+  m_ReverbPreset: 23
+  m_Room: -1000
+  m_RoomHF: -4000
+  m_DecayTime: 1.49
+  m_DecayHFRatio: 0.1
+  m_Reflections: -449
+  m_ReflectionsDelay: 0.007
+  m_Reverb: 1700
+  m_ReverbDelay: 0.011
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
+--- !u!4 &1818682380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818682378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.82, y: 0, z: 17.28}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1825429880
 GameObject:
   m_ObjectHideFlags: 0
@@ -9049,7 +9109,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
+  m_fontSize: 38.85
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9323,6 +9383,10 @@ PrefabInstance:
     - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
       propertyPath: m_Name
       value: System 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
@@ -10300,7 +10364,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.3
+  m_fontSize: 36.65
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10487,6 +10551,10 @@ PrefabInstance:
     - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
       propertyPath: m_Name
       value: System 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897768927083465966, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfa75a46f15fac04797dec2febc7af21, type: 3}

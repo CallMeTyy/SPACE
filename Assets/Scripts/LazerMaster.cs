@@ -55,6 +55,7 @@ public class LazerMaster : MonoBehaviour
     {
         if (_master != null)
         {
+            //print(_master.GetPlayerCount());
             if (_master.GetPlayerCount() < 4)
             {
                 timeCheck += Time.deltaTime;
@@ -95,6 +96,7 @@ public class LazerMaster : MonoBehaviour
 
     void CPUStuff(int ID)
     {
+        if (ID <= _master.GetPlayerCount()) return;
         OSCMessage msg = new OSCMessage("CPU");
         msg.AddValue(OSCValue.Int(ID));
         msg.AddValue(OSCValue.Float(Random.Range(1,8)));

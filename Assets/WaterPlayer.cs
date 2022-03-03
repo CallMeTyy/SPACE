@@ -31,6 +31,7 @@ public class WaterPlayer : MonoBehaviour
     [SerializeField] private float pushBack = 5f;
     [SerializeField] private Sprite[] sheet;
     [SerializeField] private GameObject shadowCube;
+    public float timeofdeath = float.MaxValue;
 
     public int timesHit;
 
@@ -38,6 +39,9 @@ public class WaterPlayer : MonoBehaviour
     private float hitTimer;
 
     private float timeBeforeWalk;
+    float jumpTimer;
+    bool jumpCooldown;
+    bool initialized;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +57,7 @@ public class WaterPlayer : MonoBehaviour
         {
             if (gameObject.name.Contains(i.ToString())) ID = i;
         }
-        CPU();
+        //CPU();
     }
 
     void MessageRecieved(OSCMessage message)
@@ -61,10 +65,12 @@ public class WaterPlayer : MonoBehaviour
         if (message.Values[0].IntValue == ID)
         {
             if (new Vector3(message.Values[1].FloatValue, message.Values[2].FloatValue, message.Values[3].FloatValue)
-                .magnitude > 1.5f && grounded)
+                .magnitude > 1.5f && grounded && !jumpCooldown)
             {
                 jump = true;
                 grounded = false;
+                jumpCooldown = true;
+                jumpTimer = 0.5f;
             }
         }
     }
@@ -108,6 +114,15 @@ public class WaterPlayer : MonoBehaviour
 
     private void Update()
     {
+        if (dead) return;
+        if (!initialized)
+        {
+            CPU();
+            initialized = true;
+        }
+        if (jumpTimer > 0) jumpTimer -= Time.deltaTime;
+        else if (jumpCooldown) jumpCooldown = false;
+
         if (hitTimer > 0) hitTimer -= Time.deltaTime;
         else if (hitWater) hitWater = false;
         //CPU();
@@ -122,9 +137,10 @@ public class WaterPlayer : MonoBehaviour
             jump = true;
             timeCheck = -1;
         }
-        if (timesHit >= 3 && !dead)
+        if (timesHit >= 3)
         {
             dead = true;
+            timeofdeath = Time.time - Random.value / 20f;
             face.gameObject.SetActive(true);
             GetComponent<SpriteRenderer>().color = Color.gray;
         }
@@ -148,6 +164,11 @@ public class WaterPlayer : MonoBehaviour
             timeCheck = 0;
             timeBeforeWalk = Random.value;
         }
+
+        if (other.gameObject.CompareTag("CPU") && isBot && cpuGrounded)
+        {
+            grounded = true;
+        }
     }
 
     void CPU()
@@ -159,6 +180,7 @@ public class WaterPlayer : MonoBehaviour
                 if (ID > _master.GetPlayerCount())
                 {
                     isBot = true;
+                    print(_master.GetPlayerCount());
                 }
             }
         }

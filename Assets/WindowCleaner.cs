@@ -24,6 +24,8 @@ public class WindowCleaner : MonoBehaviour
     private float time;
     private bool initialized;
 
+    public float timeofwin;
+
     
     // Start is called before the first frame update
     void Start()
@@ -180,6 +182,7 @@ public class WindowCleaner : MonoBehaviour
         if (win)
         {
             _light.color = Color.green;
+            timeofwin = Time.time;
         }
     }
     

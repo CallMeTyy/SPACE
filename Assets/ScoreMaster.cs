@@ -18,6 +18,10 @@ public class ScoreMaster : MonoBehaviour
     private string scene;
     private bool lavaReady = false;
     [SerializeField] private GameObject countdown;
+    bool initialized;
+    bool finalReady;
+    float timer;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +38,7 @@ public class ScoreMaster : MonoBehaviour
 
     public bool isReady()
     {
+        if (finalReady) return false;
         if (lavaReady) return true;
         bool ready = true;
         foreach (GameObject p in _lavas)
@@ -45,44 +50,84 @@ public class ScoreMaster : MonoBehaviour
         return ready;
     }
 
+
+    void FinishTime()
+    {
+        timer += Time.deltaTime;
+        if (timer > 1)
+        {
+            SceneManager.LoadScene("SpaceHub");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (_master == null) return;
+        if (!initialized)
+        {
+            _master = GameObject.FindWithTag("Master")?.GetComponent<OscMaster>();
+            initialized = true;
+        }
+        else if (_master == null) return;
         if (scene == "Fire")
         {
+            int pdone = 0;
             for (int i = 0; i < _firePlayers.Length; i++)
             {
-                scores[i] = new Vector2(_firePlayers[i].getID(),_firePlayers[i].GetScore());
+                scores[i] = new Vector2(_firePlayers[i].getID(), _firePlayers[i].winTime);
+                if (_firePlayers[i].winTime != float.MaxValue) pdone++;
             }
-            scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-            if (_master != null && scores[2].y < 0.05f)
+            scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+            if (_master != null && pdone >= 3)
             {
-                _master.AddScore((int) scores[0].x, (int) scores[1].x, (int) scores[2].x, (int) scores[3].x);
-                SceneManager.LoadScene("SpaceHub");
+                if (!finalReady)
+                {
+                    scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+                    finalReady = true;
+                    _master.AddScore((int)scores[0].x, (int)scores[1].x, (int)scores[2].x, (int)scores[3].x);
+                }
+                FinishTime();
             }
-        } else if (scene == "MiniValve")
+        }
+        else if (scene == "MiniValve")
         {
+            int pdone = 0;
             for (int i = 0; i < _valvePlayers.Length; i++)
             {
-                scores[i] = new Vector2(_valvePlayers[i].GetID(),_valvePlayers[i].GetAngle());
+                scores[i] = new Vector2(_valvePlayers[i].GetID(), _valvePlayers[i].winTime);
+                if (_valvePlayers[i].winTime != float.MaxValue) pdone++;
             }
-            scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-            if (_master != null && scores[1].y > 1800)
+            scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+            if (_master != null && pdone >= 3)
             {
-                _master.AddScore((int) scores[3].x, (int) scores[2].x, (int) scores[1].x, (int) scores[0].x);
-                SceneManager.LoadScene("SpaceHub");
+                if (!finalReady)
+                {
+                    scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+                    finalReady = true;
+                    _master.AddScore((int)scores[0].x, (int)scores[1].x, (int)scores[2].x, (int)scores[3].x);
+                }
+                FinishTime();
             }
-        } else if (scene == "Lazer")
+        }
+        else if (scene == "Lazer")
         {
             if (_lazerMaster.GetScore().x > 0.95f)
-            { 
-                _master.AddScore(1,3);
-                SceneManager.LoadScene("SpaceHub");
-            } else if (_lazerMaster.GetScore().y > 0.95f)
             {
-                _master.AddScore(2,4);
-                SceneManager.LoadScene("SpaceHub");
+                if (!finalReady)
+                {
+                    finalReady = true;
+                    _master.AddScore(1, 3);
+                }
+                FinishTime();
+            }
+            else if (_lazerMaster.GetScore().y > 0.95f)
+            {
+                if (!finalReady)
+                {
+                    finalReady = true;
+                    _master.AddScore(2, 4);
+                }
+                FinishTime();
             }
         }
         else if (scene == "Window")
@@ -90,15 +135,18 @@ public class ScoreMaster : MonoBehaviour
             int pdone = 0;
             for (int i = 0; i < _windowPlayers.Length; i++)
             {
-                if (_windowPlayers[i].win && scores[i].x == 0) scores[i] = new Vector2(_windowPlayers[i].GetID(),Time.time);
-                if (scores[i].x != 0) pdone++;
+                scores[i] = new Vector2(_windowPlayers[i].GetID(), _windowPlayers[i].timeofwin);
+                if (_windowPlayers[i].win) pdone++;
             }
-
+            scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
             if (_master != null && pdone >= 3)
             {
-                scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-                _master.AddScore((int) scores[0].x, (int) scores[1].x, (int) scores[2].x, (int) scores[3].x);
-                SceneManager.LoadScene("SpaceHub");
+                if (!finalReady)
+                {
+                    finalReady = true;
+                    _master.AddScore((int)scores[1].x, (int)scores[2].x, (int)scores[3].x, (int)scores[0].x);
+                }
+                FinishTime();
             }
         }
         else if (scene == "Volcano")
@@ -107,23 +155,18 @@ public class ScoreMaster : MonoBehaviour
             for (int i = 0; i < _lavas.Length; i++)
             {
                 if (!_lavas[i].gameObject.activeSelf) pdone++;
-                if (scores[i].x == 0 && !_lavas[i].gameObject.activeSelf)
-                {
-                    GetComponent<AudioSource>().Play();
-                    scores[i] = new Vector2(_lavas[i].GetComponent<LavaPlayerController>().GetID(), Time.time);
-                }
+                scores[i] = new Vector2(_lavas[i].GetComponent<LavaPlayerController>().GetID(), _lavas[i].GetComponent<LavaPlayerController>().timeOfDeath);
             }
-            
+            scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
             if (_master != null && pdone >= 3)
             {
-                scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-                for (int i = 0; i < _lavas.Length; i++)
+                if (!finalReady)
                 {
-                    if (_lavas[i].gameObject.activeSelf)
-                        scores[0] = new Vector2(_lavas[i].GetComponent<LavaPlayerController>().GetID(), 0);
+                    finalReady = true;
+                    scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+                    _master.AddScore((int)scores[0].x, (int)scores[3].x, (int)scores[2].x, (int)scores[1].x);
                 }
-                _master.AddScore((int) scores[0].x, (int) scores[3].x, (int) scores[2].x, (int) scores[1].x);
-                SceneManager.LoadScene("SpaceHub");
+                FinishTime();
             }
         }
         else if (scene == "WaterPlanet")
@@ -131,15 +174,20 @@ public class ScoreMaster : MonoBehaviour
             int pdone = 0;
             for (int i = 0; i < _water.Length; i++)
             {
-                if (_water[i].dead && scores[i].x == 0) scores[i] = new Vector2(_water[i].GetID(),Time.time);
-                if (scores[i].x != 0) pdone++;
+                scores[i] = new Vector2(_water[i].GetID(), _water[i].timeofdeath);
+                if (_water[i].timeofdeath != float.MaxValue) pdone++;                
             }
-
+            scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
             if (_master != null && pdone >= 3)
             {
-                scores.Sort((p1,p2)=>p1.y.CompareTo(p2.y));
-                _master.AddScore((int) scores[3].x, (int) scores[0].x, (int) scores[1].x, (int) scores[2].x);
-                SceneManager.LoadScene("SpaceHub");
+                if (!finalReady)
+                {
+                    scores.Sort((p1, p2) => p1.y.CompareTo(p2.y));
+                    finalReady = true;
+                    _master.AddScore((int)scores[3].x, (int)scores[2].x, (int)scores[1].x, (int)scores[0].x);
+                }
+
+                FinishTime();
             }
         }
     }

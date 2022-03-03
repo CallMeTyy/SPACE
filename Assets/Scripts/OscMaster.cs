@@ -25,6 +25,7 @@ public class OscMaster : MonoBehaviour
     [SerializeField] private Text _players;
     [SerializeField] private TextMeshProUGUI ip;
     [SerializeField] private TextMeshProUGUI[] playernames;
+    [SerializeField] public List<string> scenes;
     
     void Start()
     {
@@ -118,6 +119,7 @@ public class OscMaster : MonoBehaviour
         {
             ips.Add(message.Values[0].StringValue);
             ports.Add(6961 + phones.Count);
+            names[phones.Count] = "Player " + (1 + phones.Count);
             phones.Add("/player/" + message.Values[1].StringValue);
         }
 

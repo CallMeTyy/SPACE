@@ -33,11 +33,11 @@ public class IdleWalk : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_master.GetPlayerCount() >= ID && !hasPlayed)
+        if (_master.GetPlayerCount() >= ID)
         {
-            _renderer.enabled = true;
+            _renderer.enabled = true;           
+            if (!hasPlayed) source.Play();
             hasPlayed = true;
-            source.Play();
         }
         else return;
         
