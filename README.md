@@ -1,4 +1,4 @@
-#SPACE - Space-cat Pirates in Alpaca-ships doing a Competition Event
+# SPACE - Space-cat Pirates in Alpaca-ships doing a Competition Event
 
 Space is a local 4-player party game where you try to beat each other in order to speed ahead. You play as small cats in alpaca ships while competing in numerous minigame to play against your friends or NPCs. A mobile phone app (android only) is required to play and serves as the controller.
 
